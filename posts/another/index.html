@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="learning_notes_string">
+<meta itemprop="description" content="1. strlen 运用所出现的问题  strlen 返回值是 size_t，它是一个无符号整型 if(strlen(x) &gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &gt;= 0)其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。 当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型 strlen所计算的字符串长度是不计入&#39;\0&rsquo;或NUL值，思考strlen和sizeof的区别  2. 如何理解长度受限制字符串和长度不受限字符串？ 3. 字符串的复制  string.h 头文件中的 strcpy用于字符串的复制 字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串 新字符串以NUL结尾，旧字符串的后几位将丢失或者删除 理解strncpy的意义，考虑如下代码段  char buffer[BSIZER]; ... strncpy(buffer, name, BSIZE); buffer[BSIZE-1] = &#39;\0&#39;;  上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾  4. 字符串的连接  string.h 头文件中的 strcat用于字符串的连接 同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串 理解strncat字符串  5. 字符串的比较  string.h 头文件中的 strcmp用于字符串的比较 理解“词典比较” 字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值 理解strncmp字符串  6. 字符串查找  strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置 strpbrk 函数查找一组字符中第一次出现的位置 strstr 函数查找字符子串第一次出现的位置 C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反 C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：   /* 获取第一个子字符串 */ token = strtok(str, s); /* 继续获取其他的子字符串 */ while( token !">
+<meta itemprop="datePublished" content="2021-02-08T11:31:14+08:00" />
+<meta itemprop="dateModified" content="2021-02-08T11:31:14+08:00" />
+<meta itemprop="wordCount" content="162">
+
+
+
+<meta itemprop="keywords" content="C-learning-notes," />
+<meta property="og:title" content="learning_notes_string" />
+<meta property="og:description" content="1. strlen 运用所出现的问题  strlen 返回值是 size_t，它是一个无符号整型 if(strlen(x) &gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &gt;= 0)其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。 当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型 strlen所计算的字符串长度是不计入&#39;\0&rsquo;或NUL值，思考strlen和sizeof的区别  2. 如何理解长度受限制字符串和长度不受限字符串？ 3. 字符串的复制  string.h 头文件中的 strcpy用于字符串的复制 字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串 新字符串以NUL结尾，旧字符串的后几位将丢失或者删除 理解strncpy的意义，考虑如下代码段  char buffer[BSIZER]; ... strncpy(buffer, name, BSIZE); buffer[BSIZE-1] = &#39;\0&#39;;  上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾  4. 字符串的连接  string.h 头文件中的 strcat用于字符串的连接 同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串 理解strncat字符串  5. 字符串的比较  string.h 头文件中的 strcmp用于字符串的比较 理解“词典比较” 字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值 理解strncmp字符串  6. 字符串查找  strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置 strpbrk 函数查找一组字符中第一次出现的位置 strstr 函数查找字符子串第一次出现的位置 C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反 C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：   /* 获取第一个子字符串 */ token = strtok(str, s); /* 继续获取其他的子字符串 */ while( token !" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://hansomxue99.github.io/posts/another/" />
+<meta property="article:published_time" content="2021-02-08T11:31:14+08:00" />
+<meta property="article:modified_time" content="2021-02-08T11:31:14+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="learning_notes_string"/>
+<meta name="twitter:description" content="1. strlen 运用所出现的问题  strlen 返回值是 size_t，它是一个无符号整型 if(strlen(x) &gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &gt;= 0)其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。 当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型 strlen所计算的字符串长度是不计入&#39;\0&rsquo;或NUL值，思考strlen和sizeof的区别  2. 如何理解长度受限制字符串和长度不受限字符串？ 3. 字符串的复制  string.h 头文件中的 strcpy用于字符串的复制 字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串 新字符串以NUL结尾，旧字符串的后几位将丢失或者删除 理解strncpy的意义，考虑如下代码段  char buffer[BSIZER]; ... strncpy(buffer, name, BSIZE); buffer[BSIZE-1] = &#39;\0&#39;;  上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾  4. 字符串的连接  string.h 头文件中的 strcat用于字符串的连接 同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串 理解strncat字符串  5. 字符串的比较  string.h 头文件中的 strcmp用于字符串的比较 理解“词典比较” 字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值 理解strncmp字符串  6. 字符串查找  strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置 strpbrk 函数查找一组字符中第一次出现的位置 strstr 函数查找字符子串第一次出现的位置 C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反 C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：   /* 获取第一个子字符串 */ token = strtok(str, s); /* 继续获取其他的子字符串 */ while( token !"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>learning_notes_string</title>
+	<link rel="stylesheet" href="https://hansomxue99.github.io/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://hansomxue99.github.io/">hansomxue99&#39;s blog</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://hansomxue99.github.io/posts/">博客</a>
+				<a href="https://hansomxue99.github.io/about-hugo/">关于</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="mailto:404245963@qq.com" target="_blank" rel="noopener me" title="Email"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a><a href="https://github.com/" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://hansomxue99.github.io/posts/">博客</a></li>
+			<li><a href="https://hansomxue99.github.io/about-hugo/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Feb 8, 2021</span></div>
+				<h1>learning_notes_string</h1>
+			</header>
+			<div class="content">
+				<h3 id="1-strlen-运用所出现的问题">1. strlen 运用所出现的问题<a href="#1-strlen-运用所出现的问题" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>strlen 返回值是 size_t，它是一个无符号整型</li>
+<li><code>if(strlen(x) &gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &gt;= 0)</code>其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。</li>
+<li>当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型</li>
+<li>strlen所计算的字符串长度是不计入'\0&rsquo;或NUL值，思考strlen和sizeof的区别</li>
+</ul>
+<h3 id="2-如何理解长度受限制字符串和长度不受限字符串">2. 如何理解长度受限制字符串和长度不受限字符串？<a href="#2-如何理解长度受限制字符串和长度不受限字符串" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="3-字符串的复制">3. 字符串的复制<a href="#3-字符串的复制" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>string.h 头文件中的 strcpy用于字符串的复制</li>
+<li>字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串</li>
+<li>新字符串以NUL结尾，旧字符串的后几位将丢失或者删除</li>
+<li>理解strncpy的意义，考虑如下代码段</li>
+</ul>
+<pre><code>char buffer[BSIZER];
+...
+strncpy(buffer, name, BSIZE);
+buffer[BSIZE-1] = '\0';
+</code></pre><ul>
+<li>上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾</li>
+</ul>
+<h3 id="4-字符串的连接">4. 字符串的连接<a href="#4-字符串的连接" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>string.h 头文件中的 strcat用于字符串的连接</li>
+<li>同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串</li>
+<li>理解strncat字符串</li>
+</ul>
+<h3 id="5-字符串的比较">5. 字符串的比较<a href="#5-字符串的比较" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>string.h 头文件中的 strcmp用于字符串的比较</li>
+<li>理解“词典比较”</li>
+<li>字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值</li>
+<li>理解strncmp字符串</li>
+</ul>
+<h3 id="6-字符串查找">6. 字符串查找<a href="#6-字符串查找" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置</li>
+<li>strpbrk 函数查找一组字符中第一次出现的位置</li>
+<li>strstr 函数查找字符子串第一次出现的位置</li>
+<li>C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反</li>
+<li>C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：</li>
+</ul>
+<pre><code> /* 获取第一个子字符串 */
+   token = strtok(str, s);
+   
+   /* 继续获取其他的子字符串 */
+   while( token != NULL ) {
+      printf( &quot;%s\n&quot;, token );
+    
+      token = strtok(NULL, s);
+   }
+</code></pre><pre><code>for(token=strtok(str,s); token!=NULL; token=strtok(NULL,s)){
+    printf(&quot;%s\n&quot;, token);
+}
+</code></pre><ul>
+<li>C 库函数 char *strerror(int errnum) 从内部数组中搜索错误号 errnum，并返回一个指向错误消息字符串的指针。strerror 生成的错误字符串取决于开发平台和编译器。用法如下：</li>
+</ul>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+
+int main ()
+{
+   FILE *fp;
+
+   fp = fopen(&quot;file.txt&quot;,&quot;r&quot;);
+   if( fp == NULL ) 
+   {
+      printf(&quot;Error: %s\n&quot;, strerror(errno));
+   }
+   
+  return(0);
+}
+
+结果显示：Error: No such file or directory
+</code></pre>
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://hansomxue99.github.io/tags/c-learning-notes">C-learning-notes</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>162 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-02-08 11:31 &#43;0800</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://hansomxue99.github.io/posts/myfirstblog/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>STM32学习笔记——寄存器映射</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2021 <a href="https://hansomxue99.github.io/">hansomxue99</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://hansomxue99.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="https://hansomxue99.github.io/js/bundle.min.4a9a0ac3d2217822c7865b4161e6c2a71de1d70492264337755427898dd718f6.js" integrity="sha256-SpoKw9IheCLHhltBYebCpx3h1wSSJkM3dVQniY3XGPY=" crossorigin="anonymous"></script>
+	
+
+</body>
+
+</html>
