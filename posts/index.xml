@@ -6,8 +6,172 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-CN</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Mon, 08 Feb 2021 11:31:14 +0800</lastBuildDate>
+		<lastBuildDate>Wed, 10 Feb 2021 10:48:50 +0800</lastBuildDate>
 		<atom:link href="https://hansomxue99.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Uart异步串口通信</title>
+			<link>https://hansomxue99.github.io/posts/uart/</link>
+			<pubDate>Wed, 10 Feb 2021 10:48:50 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/uart/</guid>
+			<description>1. 什么是UART？ （1）UART，通用异步收发器。相比于USART，UART收发是以字符为单位，没有CLK同步时钟。 （2）UART最主要的是三根数据线：  TXD发送引脚 RXD接收引脚 GND接地引脚  （3）UART比较重要的几个参数：  波特率：每秒传送的码元数，比如9600，115200 数据位：典型值5、6、8、9位 奇偶校验位：一般分为奇校验和偶校验或者无校验位 停止位：典型值1、1.5、2位  （4）UART工作示意图如下图所示：   UART工作模式
+  这是典型的UART异步通信模式，数据位为8，无奇偶校验位，一位停止位。UART串口发送一次包含：起始位，数据位（低位在前），奇偶校验位（可选），以及停止位。2. 以STM32为例，分析UART工作原理 （1）了解STM32串口主要特性  可编程数据字长度(8位或9位) 可配置的停止位-支持1或2个停止位 可配置的使用DMA的多缓冲器通信 单独的发送器和接收器使能位 检测标志：接收缓冲器满、发送缓冲器空、传输结束标志  （2）了解STM32串口主要寄存器 STM32串口工作流程如下图：   UART工作流程
+   状态寄存器USART_SR
+  TXE（发送数据寄存器空），当数据全部移入发送移位寄存器时，置1 TC（发送完成），当一帧数据发送完成，且TXE=1时，置1 RXNE（读数据寄存器非空），当有数据读入数据寄存器USART_DR时，置1   数据寄存器USART_DR，发送或接收缓存数据
+  控制寄存器1 USART_CR1，主要用于配置中断和使能
+  UE（USART使能），TE（发送使能），RE（接收使能） TXEIE 发送缓冲区空中断使能 TCIE 发送完成中断使能 RXNEIE 接收缓冲区非空中断使能  （3）STM32基本配置：波特率，数据位，奇偶校验位，停止位，串口/中断使能 3. UART发送数据 （1）首先是对UART串口的初始化配置 （2）调用函数 HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)  huart是UART句柄结构体（姑且先这么叫） pData是待发送的字符数组，每次发送前都需要进行一次读写，可以调用sprintf函数 Size是指pData字符数组的长度，一般是strlen(pData) Timeout是待发送数据的生存时间，若超时会返回HAL_TIMEOUT  （3）自定义函数usUART_sendString(UART_HandleTypeDef *huart, uint8_t *pData)  这是根据HAL库发送函数由用户进行改写的字符串发送函数，形参只有两个 函数编写借鉴51单片机串口思想，代码编写如下：  void usUart_sendString(UART_HandleTypeDef *huart, uint8_t *pData) { /* 判断是否发送完成 */ while(*pData) { /* 每次发送一个字符 */ HAL_StatusTypeDef HAL_UART_Transmit(huart, pData, 1, 0xffff); /* 字符指针移位，指向下一个字符的内容 */ pData++; } } 4.</description>
+			<content type="html"><![CDATA[<h2 id="1-什么是uart">1. 什么是UART？</h2>
+<h3 id="1uart通用异步收发器相比于usartuart收发是以字符为单位没有clk同步时钟">（1）UART，通用异步收发器。相比于USART，UART收发是以字符为单位，没有CLK同步时钟。</h3>
+<h3 id="2uart最主要的是三根数据线br">（2）UART最主要的是三根数据线：<!-- raw HTML omitted --></h3>
+<ul>
+<li>TXD发送引脚<!-- raw HTML omitted --></li>
+<li>RXD接收引脚<!-- raw HTML omitted --></li>
+<li>GND接地引脚<!-- raw HTML omitted --></li>
+</ul>
+<h3 id="3uart比较重要的几个参数br">（3）UART比较重要的几个参数：<!-- raw HTML omitted --></h3>
+<ul>
+<li>波特率：每秒传送的码元数，比如9600，115200<!-- raw HTML omitted --></li>
+<li>数据位：典型值5、6、8、9位<!-- raw HTML omitted --></li>
+<li>奇偶校验位：一般分为奇校验和偶校验或者无校验位<!-- raw HTML omitted --></li>
+<li>停止位：典型值1、1.5、2位<!-- raw HTML omitted --></li>
+</ul>
+<h3 id="4uart工作示意图如下图所示">（4）UART工作示意图如下图所示：</h3>
+<figure>
+    <img src="https://img-blog.csdnimg.cn/20210210180902920.png"
+         alt="image"/> <figcaption>
+            <p>UART工作模式</p>
+        </figcaption>
+</figure>
+
+<p>这是典型的UART异步通信模式，数据位为8，无奇偶校验位，一位停止位。UART串口发送一次包含：起始位，数据位（低位在前），奇偶校验位（可选），以及停止位。<!-- raw HTML omitted -->
+<!-- raw HTML omitted --></p>
+<h2 id="2-以stm32为例分析uart工作原理">2. 以STM32为例，分析UART工作原理</h2>
+<h3 id="1了解stm32串口主要特性">（1）了解STM32串口主要特性</h3>
+<ul>
+<li>可编程数据字长度(8位或9位)</li>
+<li>可配置的停止位-支持1或2个停止位</li>
+<li>可配置的使用DMA的多缓冲器通信</li>
+<li>单独的发送器和接收器使能位</li>
+<li>检测标志：接收缓冲器满、发送缓冲器空、传输结束标志</li>
+</ul>
+<h3 id="2了解stm32串口主要寄存器">（2）了解STM32串口主要寄存器</h3>
+<p>STM32串口工作流程如下图：
+<figure>
+    <img src="https://img-blog.csdnimg.cn/20210210183410273.png"
+         alt="image"/> <figcaption>
+            <p>UART工作流程</p>
+        </figcaption>
+</figure>
+</p>
+<blockquote>
+<p>状态寄存器USART_SR</p>
+</blockquote>
+<ul>
+<li>TXE（发送数据寄存器空），当数据全部移入发送移位寄存器时，置1</li>
+<li>TC（发送完成），当一帧数据发送完成，且TXE=1时，置1</li>
+<li>RXNE（读数据寄存器非空），当有数据读入数据寄存器USART_DR时，置1</li>
+</ul>
+<blockquote>
+<p>数据寄存器USART_DR，发送或接收缓存数据</p>
+</blockquote>
+<blockquote>
+<p>控制寄存器1 USART_CR1，主要用于配置中断和使能</p>
+</blockquote>
+<ul>
+<li>UE（USART使能），TE（发送使能），RE（接收使能）</li>
+<li>TXEIE 发送缓冲区空中断使能</li>
+<li>TCIE 发送完成中断使能</li>
+<li>RXNEIE 接收缓冲区非空中断使能</li>
+</ul>
+<h3 id="3stm32基本配置波特率数据位奇偶校验位停止位串口中断使能">（3）STM32基本配置：波特率，数据位，奇偶校验位，停止位，串口/中断使能</h3>
+<h2 id="3-uart发送数据">3. UART发送数据</h2>
+<h3 id="1首先是对uart串口的初始化配置">（1）首先是对UART串口的初始化配置</h3>
+<h3 id="2调用函数-hal_statustypedef-hal_uart_transmituart_handletypedef-huart-uint8_t-pdata-uint16_t-size-uint32_t-timeout">（2）调用函数 <code>HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></h3>
+<ul>
+<li>huart是UART句柄结构体（姑且先这么叫）</li>
+<li>pData是待发送的字符数组，每次发送前都需要进行一次读写，可以调用sprintf函数</li>
+<li>Size是指pData字符数组的长度，一般是<code>strlen(pData)</code></li>
+<li>Timeout是待发送数据的生存时间，若超时会返回HAL_TIMEOUT</li>
+</ul>
+<h3 id="3自定义函数usuart_sendstringuart_handletypedef-huart-uint8_t-pdata">（3）自定义函数<code>usUART_sendString(UART_HandleTypeDef *huart, uint8_t *pData)</code></h3>
+<ul>
+<li>这是根据HAL库发送函数由用户进行改写的字符串发送函数，形参只有两个</li>
+<li>函数编写借鉴51单片机串口思想，代码编写如下：</li>
+</ul>
+<pre><code>void usUart_sendString(UART_HandleTypeDef *huart, uint8_t *pData)
+{
+  /*
+  判断是否发送完成
+  */
+  while(*pData)   
+  {
+    /*
+    每次发送一个字符
+    */
+    HAL_StatusTypeDef HAL_UART_Transmit(huart, pData, 1, 0xffff);
+    /*
+    字符指针移位，指向下一个字符的内容
+    */
+    pData++;
+  }
+}
+</code></pre><h2 id="4-uart接收">4. UART接收</h2>
+<h3 id="1首先对uart串口进行初始化">（1）首先对UART串口进行初始化</h3>
+<h3 id="2调用函数hal_statustypedef-hal_uart_receiveuart_handletypedef-huart-uint8_t-pdata-uint16_t-size-uint32_t-timeout">（2）调用函数<code>HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></h3>
+<ul>
+<li>采用这种方法一般都是查询法，如下：</li>
+</ul>
+<pre><code>/* 判断是否接收成功 */
+if(HAL_UART_Receive(&amp;huart1, &amp;uRx_Data, 1, 1000) == HAL_OK)
+{
+  /* 将接收成功的数据通过串口发出来 */
+  HAL_UART_Transmit(&amp;huart1, &amp;uRx_Data, 1, 0xffff);
+}
+</code></pre><ul>
+<li>这种方式接收，必须事先知晓接收数据的长度，否则大概率会出错；其次，采用此方法会严重占用MCU的资源，尤其是放到while函数中。</li>
+<li>除此之外，若是采用中断的方法，像这样接收后直接处理，就会出现另一个问题，即，还未发送出去（移位寄存器还未清空）就直接进入下一次中断</li>
+</ul>
+<h3 id="3采用中断方式接收完成后再处理">（3）采用中断方式（接收完成后再处理）</h3>
+<ul>
+<li>首先需要配置中断，中断配置在此略过……</li>
+<li>中断函数代码编写如下：</li>
+</ul>
+<pre><code>/*
+* @brief This function handles USART1 global interrupt.
+*/
+void USART1_IRQHandler(void)
+{
+  static unsigned char   uRx_Data[1024] = {0}     ;    //存储数组
+  static unsigned char * pRx_Data       = uRx_Data;    //指向存储数组将要存储数据的位
+  static unsigned char   uLength        =  0      ;    //接收数据长度
+
+  /* -1- 接收数据 */
+  HAL_UART_Receive(&amp;huart1, pRx_Data, 1, 1000);
+
+  /* -2- 判断数据结尾 */
+  if(*pRx_Data == '\n')
+  {
+      /* -3- 将接收成功的数据通过串口发出去 */
+      HAL_UART_Transmit(&amp;huart1, uRx_Data, uLength, 0xffff);
+
+      /* -4- 初始化指针和数据长度 */
+      pRx_Data = uRx_Data;   //重新指向数组起始位置
+      uLength  = 0;          //长度清零
+  }
+  /* -5- 若未结束，指针往下一位移动，长度自增一 */
+  else
+  {
+      pRx_Data++;
+      uLength++;
+  }
+  HAL_UART_IRQHandler(&amp;huart1);
+}
+</code></pre><h2 id="参考资料">参考资料</h2>
+<p>[1] <a href="https://www.cnblogs.com/ChurF-Lin/p/10809000.html">基于STM32之UART串口通信协议（三）接收</a></p>
+<p>[2] <a href="https://www.bilibili.com/video/BV1f7411G7qc?t=217">UART串口通信协议原理</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>learning_notes_string</title>
