@@ -7,7 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Wed, 10 Feb 2021 10:48:50 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/%E5%BC%82%E6%AD%A5%E9%80%9A%E4%BF%A1/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 13 Feb 2021 09:42:04 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/%E5%BC%82%E6%AD%A5%E9%80%9A%E4%BF%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于HAL中断的串口收发</title>
+      <link>https://hansomxue99.github.io/posts/uart_it/</link>
+      <pubDate>Sat, 13 Feb 2021 09:42:04 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/uart_it/</guid>
+      <description>1. 串口中断的配置——使用cubemx软件 （1）配置时钟
+（2）配置通用GPIO
+（3）使能串口：GPIO、串口基本参数、NVIC中断函数
+2. HAL库中断处理机制 （1）NVIC，嵌套向量中断控制器，用来决定中断的优先级；NVIC在Conrtex-M内核中（2）中断优先级用一个8位寄存器来进行配置，其中低4位全部置为0（为节约内核资源），因此只有高4为配置优先级。中断优先级分为五个分组，它们的抢占优先级和子优先级都不同，具体如下表：
+   优先级分组 抢占优先级占的位数 子优先级占的位数     NVIC_PriorityGroup_0 0 bit 4 bit   NVIC_PriorityGroup_1 1 bit 3 bit   NVIC_PriorityGroup_2 2 bit 2 bit   NVIC_PriorityGroup_3 3 bit 1 bit   NVIC_PriorityGroup_4 4 bit 0 bit    （3）CPU优先级的判断
+ 先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+（2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
+（3）重定义串口中断回调函数
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
+    </item>
+    
     <item>
       <title>Uart异步串口通信</title>
       <link>https://hansomxue99.github.io/posts/uart/</link>
