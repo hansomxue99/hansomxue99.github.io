@@ -22,11 +22,11 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&amp;#39;\n&amp;#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
     </item>
     
     <item>
-      <title>Uart异步串口通信</title>
+      <title>UART异步串口通信</title>
       <link>https://hansomxue99.github.io/posts/uart/</link>
       <pubDate>Wed, 10 Feb 2021 10:48:50 +0800</pubDate>
       
@@ -40,31 +40,12 @@
     </item>
     
     <item>
-      <title>learning_notes_string</title>
-      <link>https://hansomxue99.github.io/posts/another/</link>
-      <pubDate>Mon, 08 Feb 2021 11:31:14 +0800</pubDate>
-      
-      <guid>https://hansomxue99.github.io/posts/another/</guid>
-      <description>1. strlen 运用所出现的问题  strlen 返回值是 size_t，它是一个无符号整型 if(strlen(x) &amp;gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &amp;gt;= 0)其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。 当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型 strlen所计算的字符串长度是不计入&#39;\0&amp;rsquo;或NUL值，思考strlen和sizeof的区别  2. 如何理解长度受限制字符串和长度不受限字符串？ 3. 字符串的复制  string.h 头文件中的 strcpy用于字符串的复制 字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串 新字符串以NUL结尾，旧字符串的后几位将丢失或者删除 理解strncpy的意义，考虑如下代码段  char buffer[BSIZER]; ... strncpy(buffer, name, BSIZE); buffer[BSIZE-1] = &#39;\0&#39;;  上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾  4. 字符串的连接  string.h 头文件中的 strcat用于字符串的连接 同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串 理解strncat字符串  5. 字符串的比较  string.h 头文件中的 strcmp用于字符串的比较 理解“词典比较” 字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值 理解strncmp字符串  6. 字符串查找  strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置 strpbrk 函数查找一组字符中第一次出现的位置 strstr 函数查找字符子串第一次出现的位置 C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反 C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：   /* 获取第一个子字符串 */ token = strtok(str, s); /* 继续获取其他的子字符串 */ while( token !</description>
-    </item>
-    
-    <item>
-      <title>STM32学习笔记——寄存器映射</title>
-      <link>https://hansomxue99.github.io/posts/myfirstblog/</link>
-      <pubDate>Mon, 08 Feb 2021 11:06:24 +0800</pubDate>
-      
-      <guid>https://hansomxue99.github.io/posts/myfirstblog/</guid>
-      <description>存储器映射  总线基地址     总线名称 总线基地址      APB1 0x4000 0000    APB2 0x4001 0000    AHB 0x4000 8000     GPIO基地址  GPIO端口挂在总线APB2上
-   端口名称 端口基地址      GPIOA 0x4001 0800    GPIOB 0x4001 0C00    GPIOC 0x4001 1000    GPIOD 0x4001 1400    GPIOE 0x4001 1800    GPIOF 0x4001 1C00    GPIOG 0x4001 2000     每个端口的基地址相差0x400</description>
-    </item>
-    
-    <item>
       <title>关于</title>
       <link>https://hansomxue99.github.io/about-hugo/</link>
       <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>https://hansomxue99.github.io/about-hugo/</guid>
-      <description>本站用于测试！</description>
+      <description>本站用于记录学习过程中的一些思考！</description>
     </item>
     
   </channel>

@@ -23,7 +23,7 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&amp;#39;\n&amp;#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
 			<content type="html"><![CDATA[<h2 id="1-串口中断的配置使用cubemx软件">1. 串口中断的配置——使用cubemx软件</h2>
 <p>（1）配置时钟</p>
 <p>（2）配置通用GPIO</p>
@@ -77,30 +77,70 @@
 <code>__weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)</code></p>
 <p>（2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。</p>
 <p>（3）重定义串口中断回调函数</p>
-<pre><code>/* USER CODE BEGIN 4 */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-	/* 判断是哪个串口触发的中断 */
-	if(huart -&gt;Instance == USART1)
-	{
-			if(rec_dat=='\n')
-			{
-				HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength);
-				ulength=0;
-			}
-			else
-			{
-				rec_buf[ulength++]=rec_dat;
-			}
-			//重新使能串口接收中断
-			HAL_UART_Receive_IT(huart, &amp;rec_dat, 1);
-	}
-}
-/* USER CODE END 4 */
-</code></pre><h2 id="4-串口收发">4. 串口收发</h2>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* USER CODE BEGIN 4 */</span>
+<span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="cm">/* 判断是哪个串口触发的中断 */</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">huart</span> <span class="o">-&gt;</span><span class="n">Instance</span> <span class="o">==</span> <span class="n">USART1</span><span class="p">)</span>
+	<span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">rec_dat</span><span class="o">==</span><span class="sc">&#39;\n&#39;</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">HAL_UART_Transmit_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">rec_buf</span><span class="p">,</span> <span class="n">ulength</span><span class="p">);</span>
+				<span class="n">ulength</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="k">else</span>
+			<span class="p">{</span>
+				<span class="n">rec_buf</span><span class="p">[</span><span class="n">ulength</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">rec_dat</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="c1">//重新使能串口接收中断
+</span><span class="c1"></span>			<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="n">huart</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rec_dat</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/* USER CODE END 4 */</span>
+</code></pre></div><h2 id="4-串口收发">4. 串口收发</h2>
 <p>（1）发送使用函数<code>HAL_UART_Transmit_IT</code></p>
+<ul>
+<li>注意：<code>HAL_UART_Transmit_IT</code>不能连续使用，只会发送第二次</li>
+<li>要想连续使用<code>HAL_UART_Transmit_IT</code>，必须添加代码<code>while(huart1.gState != HAL_UART_STATE_READY);</code></li>
+<li>串口发送一般不使用中断，而使用轮询模式</li>
+</ul>
 <p>（2）接收前必须先要使能中断接收，使用函数<code>HAL_UART_Receive_IT</code></p>
-<h2 id="参考资料">参考资料</h2>
+<h2 id="5-串口发送printf的重定向">5. 串口发送printf的重定向</h2>
+<p>所以，重定向fputc()函数完整的代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if 1
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cm">/* 告知连接器不从C库链接使用半主机的函数 */</span>
+<span class="cp">#pragma import(__use_no_semihosting)
+</span><span class="cp"></span>
+<span class="cm">/* 定义 _sys_exit() 以避免使用半主机模式 */</span>
+<span class="kt">void</span> <span class="nf">_sys_exit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* 标准库需要的支持类型 */</span>
+<span class="k">struct</span> <span class="n">__FILE</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">handle</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">FILE</span> <span class="n">__stdout</span><span class="p">;</span>
+
+<span class="cm">/*  */</span>
+<span class="kt">int</span> <span class="nf">fputc</span><span class="p">(</span><span class="kt">int</span> <span class="n">ch</span><span class="p">,</span> <span class="n">FILE</span> <span class="o">*</span><span class="n">stream</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* 堵塞判断串口是否发送完成 */</span>
+    <span class="k">while</span><span class="p">((</span><span class="n">USART1</span><span class="o">-&gt;</span><span class="n">ISR</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="n">X40</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="cm">/* 串口发送完成，将该字符发送 */</span>
+    <span class="n">USART1</span><span class="o">-&gt;</span><span class="n">TDR</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8_t</span><span class="p">)</span> <span class="n">ch</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">ch</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">#endif
+</span></code></pre></div><h2 id="参考资料">参考资料</h2>
 <ul>
 <li><a href="http://www.mculover666.cn/posts/2504113390/">STM32CubeMX_05 | 使用EXIT中断检测按键</a></li>
 </ul>
@@ -108,7 +148,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		</item>
 		
 		<item>
-			<title>Uart异步串口通信</title>
+			<title>UART异步串口通信</title>
 			<link>https://hansomxue99.github.io/posts/uart/</link>
 			<pubDate>Wed, 10 Feb 2021 10:48:50 +0800</pubDate>
 			
@@ -197,36 +237,36 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 <li>这是根据HAL库发送函数由用户进行改写的字符串发送函数，形参只有两个</li>
 <li>函数编写借鉴51单片机串口思想，代码编写如下：</li>
 </ul>
-<pre><code>void usUart_sendString(UART_HandleTypeDef *huart, uint8_t *pData)
-{
-  /*
-  判断是否发送完成
-  */
-  while(*pData)   
-  {
-    /*
-    每次发送一个字符
-    */
-    HAL_StatusTypeDef HAL_UART_Transmit(huart, pData, 1, 0xffff);
-    /*
-    字符指针移位，指向下一个字符的内容
-    */
-    pData++;
-  }
-}
-</code></pre><h2 id="4-uart接收">4. UART接收</h2>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">usUart_sendString</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">,</span> <span class="n">uint8_t</span> <span class="o">*</span><span class="n">pData</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/*
+</span><span class="cm">  判断是否发送完成
+</span><span class="cm">  */</span>
+  <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">pData</span><span class="p">)</span>   
+  <span class="p">{</span>
+    <span class="cm">/*
+</span><span class="cm">    每次发送一个字符
+</span><span class="cm">    */</span>
+    <span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="n">huart</span><span class="p">,</span> <span class="n">pData</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">);</span>
+    <span class="cm">/*
+</span><span class="cm">    字符指针移位，指向下一个字符的内容
+</span><span class="cm">    */</span>
+    <span class="n">pData</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="4-uart接收">4. UART接收</h2>
 <h3 id="1首先对uart串口进行初始化">（1）首先对UART串口进行初始化</h3>
 <h3 id="2调用函数hal_statustypedef-hal_uart_receiveuart_handletypedef-huart-uint8_t-pdata-uint16_t-size-uint32_t-timeout">（2）调用函数<code>HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></h3>
 <ul>
 <li>采用这种方法一般都是查询法，如下：</li>
 </ul>
-<pre><code>/* 判断是否接收成功 */
-if(HAL_UART_Receive(&amp;huart1, &amp;uRx_Data, 1, 1000) == HAL_OK)
-{
-  /* 将接收成功的数据通过串口发出来 */
-  HAL_UART_Transmit(&amp;huart1, &amp;uRx_Data, 1, 0xffff);
-}
-</code></pre><ul>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* 判断是否接收成功 */</span>
+<span class="k">if</span><span class="p">(</span><span class="n">HAL_UART_Receive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">uRx_Data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">==</span> <span class="n">HAL_OK</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/* 将接收成功的数据通过串口发出来 */</span>
+  <span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">uRx_Data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><ul>
 <li>这种方式接收，必须事先知晓接收数据的长度，否则大概率会出错；其次，采用此方法会严重占用MCU的资源，尤其是放到while函数中。</li>
 <li>除此之外，若是采用中断的方法，像这样接收后直接处理，就会出现另一个问题，即，还未发送出去（移位寄存器还未清空）就直接进入下一次中断</li>
 </ul>
@@ -235,309 +275,40 @@ if(HAL_UART_Receive(&amp;huart1, &amp;uRx_Data, 1, 1000) == HAL_OK)
 <li>首先需要配置中断，中断配置在此略过……</li>
 <li>中断函数代码编写如下：</li>
 </ul>
-<pre><code>/*
-* @brief This function handles USART1 global interrupt.
-*/
-void USART1_IRQHandler(void)
-{
-  static unsigned char   uRx_Data[1024] = {0}     ;    //存储数组
-  static unsigned char * pRx_Data       = uRx_Data;    //指向存储数组将要存储数据的位
-  static unsigned char   uLength        =  0      ;    //接收数据长度
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
+</span><span class="cm">* @brief This function handles USART1 global interrupt.
+</span><span class="cm">*/</span>
+<span class="kt">void</span> <span class="nf">USART1_IRQHandler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">uRx_Data</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">}</span>     <span class="p">;</span>    <span class="c1">//存储数组
+</span><span class="c1"></span>  <span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pRx_Data</span>       <span class="o">=</span> <span class="n">uRx_Data</span><span class="p">;</span>    <span class="c1">//指向存储数组将要存储数据的位
+</span><span class="c1"></span>  <span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">uLength</span>        <span class="o">=</span>  <span class="mi">0</span>      <span class="p">;</span>    <span class="c1">//接收数据长度
+</span><span class="c1"></span>
+  <span class="cm">/* -1- 接收数据 */</span>
+  <span class="n">HAL_UART_Receive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">pRx_Data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
 
-  /* -1- 接收数据 */
-  HAL_UART_Receive(&amp;huart1, pRx_Data, 1, 1000);
+  <span class="cm">/* -2- 判断数据结尾 */</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">pRx_Data</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="cm">/* -3- 将接收成功的数据通过串口发出去 */</span>
+      <span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">uRx_Data</span><span class="p">,</span> <span class="n">uLength</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">);</span>
 
-  /* -2- 判断数据结尾 */
-  if(*pRx_Data == '\n')
-  {
-      /* -3- 将接收成功的数据通过串口发出去 */
-      HAL_UART_Transmit(&amp;huart1, uRx_Data, uLength, 0xffff);
-
-      /* -4- 初始化指针和数据长度 */
-      pRx_Data = uRx_Data;   //重新指向数组起始位置
-      uLength  = 0;          //长度清零
-  }
-  /* -5- 若未结束，指针往下一位移动，长度自增一 */
-  else
-  {
-      pRx_Data++;
-      uLength++;
-  }
-  HAL_UART_IRQHandler(&amp;huart1);
-}
-</code></pre><h2 id="参考资料">参考资料</h2>
+      <span class="cm">/* -4- 初始化指针和数据长度 */</span>
+      <span class="n">pRx_Data</span> <span class="o">=</span> <span class="n">uRx_Data</span><span class="p">;</span>   <span class="c1">//重新指向数组起始位置
+</span><span class="c1"></span>      <span class="n">uLength</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>          <span class="c1">//长度清零
+</span><span class="c1"></span>  <span class="p">}</span>
+  <span class="cm">/* -5- 若未结束，指针往下一位移动，长度自增一 */</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+      <span class="n">pRx_Data</span><span class="o">++</span><span class="p">;</span>
+      <span class="n">uLength</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">HAL_UART_IRQHandler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="参考资料">参考资料</h2>
 <p>[1] <a href="https://www.cnblogs.com/ChurF-Lin/p/10809000.html">基于STM32之UART串口通信协议（三）接收</a></p>
 <p>[2] <a href="https://www.bilibili.com/video/BV1f7411G7qc?t=217">UART串口通信协议原理</a></p>
 ]]></content>
-		</item>
-		
-		<item>
-			<title>learning_notes_string</title>
-			<link>https://hansomxue99.github.io/posts/another/</link>
-			<pubDate>Mon, 08 Feb 2021 11:31:14 +0800</pubDate>
-			
-			<guid>https://hansomxue99.github.io/posts/another/</guid>
-			<description>1. strlen 运用所出现的问题  strlen 返回值是 size_t，它是一个无符号整型 if(strlen(x) &amp;gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &amp;gt;= 0)其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。 当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型 strlen所计算的字符串长度是不计入&#39;\0&amp;rsquo;或NUL值，思考strlen和sizeof的区别  2. 如何理解长度受限制字符串和长度不受限字符串？ 3. 字符串的复制  string.h 头文件中的 strcpy用于字符串的复制 字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串 新字符串以NUL结尾，旧字符串的后几位将丢失或者删除 理解strncpy的意义，考虑如下代码段  char buffer[BSIZER]; ... strncpy(buffer, name, BSIZE); buffer[BSIZE-1] = &#39;\0&#39;;  上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾  4. 字符串的连接  string.h 头文件中的 strcat用于字符串的连接 同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串 理解strncat字符串  5. 字符串的比较  string.h 头文件中的 strcmp用于字符串的比较 理解“词典比较” 字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值 理解strncmp字符串  6. 字符串查找  strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置 strpbrk 函数查找一组字符中第一次出现的位置 strstr 函数查找字符子串第一次出现的位置 C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反 C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：   /* 获取第一个子字符串 */ token = strtok(str, s); /* 继续获取其他的子字符串 */ while( token !</description>
-			<content type="html"><![CDATA[<h3 id="1-strlen-运用所出现的问题">1. strlen 运用所出现的问题</h3>
-<ul>
-<li>strlen 返回值是 size_t，它是一个无符号整型</li>
-<li><code>if(strlen(x) &gt;= strlen(y)) 和 if(strlen(x)-strlen(y) &gt;= 0)</code>其实是不等价的，原因是strlen返回值是一个无符号类型，strlen(x)-strlen(y)也是一个无符号类型，而无符号数绝不会是一个负值。</li>
-<li>当然这个问题也是可以解决的，就是把strlen的返回值强制转换为int类型</li>
-<li>strlen所计算的字符串长度是不计入'\0&rsquo;或NUL值，思考strlen和sizeof的区别</li>
-</ul>
-<h3 id="2-如何理解长度受限制字符串和长度不受限字符串">2. 如何理解长度受限制字符串和长度不受限字符串？</h3>
-<h3 id="3-字符串的复制">3. 字符串的复制</h3>
-<ul>
-<li>string.h 头文件中的 strcpy用于字符串的复制</li>
-<li>字符串复制操作前必须保证目标字符串的空间足以容纳需要复制的字符串</li>
-<li>新字符串以NUL结尾，旧字符串的后几位将丢失或者删除</li>
-<li>理解strncpy的意义，考虑如下代码段</li>
-</ul>
-<pre><code>char buffer[BSIZER];
-...
-strncpy(buffer, name, BSIZE);
-buffer[BSIZE-1] = '\0';
-</code></pre><ul>
-<li>上述代码段可以保证 strncpy操作后所得字符串是以NUL结尾</li>
-</ul>
-<h3 id="4-字符串的连接">4. 字符串的连接</h3>
-<ul>
-<li>string.h 头文件中的 strcat用于字符串的连接</li>
-<li>同样的，字符串连接操作前必须保证目标字符串的空间足以容纳连接后的字符串</li>
-<li>理解strncat字符串</li>
-</ul>
-<h3 id="5-字符串的比较">5. 字符串的比较</h3>
-<ul>
-<li>string.h 头文件中的 strcmp用于字符串的比较</li>
-<li>理解“词典比较”</li>
-<li>字符串相等：返回0； 大于：返回一个大于0的值； 小于：返回一个小于0的值</li>
-<li>理解strncmp字符串</li>
-</ul>
-<h3 id="6-字符串查找">6. 字符串查找</h3>
-<ul>
-<li>strchr 和 strrchr 函数查找字符出现第一次和最后一次的位置</li>
-<li>strpbrk 函数查找一组字符中第一次出现的位置</li>
-<li>strstr 函数查找字符子串第一次出现的位置</li>
-<li>C 库函数 size_t strspn(const char *str1, const char *str2) 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标， strcspn和strspn正好相反</li>
-<li>C 库函数 char *strtok(char *str, const char *delim) 分解字符串 str 为一组字符串，delim 为分隔符。用法如下：</li>
-</ul>
-<pre><code> /* 获取第一个子字符串 */
-   token = strtok(str, s);
-   
-   /* 继续获取其他的子字符串 */
-   while( token != NULL ) {
-      printf( &quot;%s\n&quot;, token );
-    
-      token = strtok(NULL, s);
-   }
-</code></pre><pre><code>for(token=strtok(str,s); token!=NULL; token=strtok(NULL,s)){
-    printf(&quot;%s\n&quot;, token);
-}
-</code></pre><ul>
-<li>C 库函数 char *strerror(int errnum) 从内部数组中搜索错误号 errnum，并返回一个指向错误消息字符串的指针。strerror 生成的错误字符串取决于开发平台和编译器。用法如下：</li>
-</ul>
-<pre><code>#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;errno.h&gt;
-
-int main ()
-{
-   FILE *fp;
-
-   fp = fopen(&quot;file.txt&quot;,&quot;r&quot;);
-   if( fp == NULL ) 
-   {
-      printf(&quot;Error: %s\n&quot;, strerror(errno));
-   }
-   
-  return(0);
-}
-
-结果显示：Error: No such file or directory
-</code></pre>]]></content>
-		</item>
-		
-		<item>
-			<title>STM32学习笔记——寄存器映射</title>
-			<link>https://hansomxue99.github.io/posts/myfirstblog/</link>
-			<pubDate>Mon, 08 Feb 2021 11:06:24 +0800</pubDate>
-			
-			<guid>https://hansomxue99.github.io/posts/myfirstblog/</guid>
-			<description>存储器映射  总线基地址     总线名称 总线基地址      APB1 0x4000 0000    APB2 0x4001 0000    AHB 0x4000 8000     GPIO基地址  GPIO端口挂在总线APB2上
-   端口名称 端口基地址      GPIOA 0x4001 0800    GPIOB 0x4001 0C00    GPIOC 0x4001 1000    GPIOD 0x4001 1400    GPIOE 0x4001 1800    GPIOF 0x4001 1C00    GPIOG 0x4001 2000     每个端口的基地址相差0x400</description>
-			<content type="html"><![CDATA[<h1 id="存储器映射">存储器映射</h1>
-<ol>
-<li>总线基地址</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">总线名称</th>
-<th style="text-align:center">总线基地址</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">APB1</td>
-<td style="text-align:center">0x4000 0000</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">APB2</td>
-<td style="text-align:center">0x4001 0000</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">AHB</td>
-<td style="text-align:center">0x4000 8000</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<ol start="2">
-<li>GPIO基地址</li>
-</ol>
-<p>GPIO端口挂在总线APB2上</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">端口名称</th>
-<th style="text-align:center">端口基地址</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">GPIOA</td>
-<td style="text-align:center">0x4001 0800</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOC</td>
-<td style="text-align:center">0x4001 1000</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOD</td>
-<td style="text-align:center">0x4001 1400</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOE</td>
-<td style="text-align:center">0x4001 1800</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOF</td>
-<td style="text-align:center">0x4001 1C00</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOG</td>
-<td style="text-align:center">0x4001 2000</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>每个端口的基地址相差0x400</p>
-<ol start="3">
-<li>GPIOx端口的寄存器列表</li>
-</ol>
-<p>以GPIOB端口为例</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">寄存器名称</th>
-<th style="text-align:center">寄存器基地址</th>
-<th style="text-align:center">偏移地址</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">GPIOB_CRL</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x00</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB_CRH</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x04</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB_IDR</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x08</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB_ODR</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x0C</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB_BSRR</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x10</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB_BRR</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x14</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">GPIOB_LCKR</td>
-<td style="text-align:center">0x4001 0C00</td>
-<td style="text-align:center">0x18</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>每个寄存器地址相差0x04</p>
-<h1 id="gpiob端口寄存器描述使pb0输出01">GPIOB端口寄存器描述——使PB0输出0/1</h1>
-<h2 id="宏定义方式">宏定义方式</h2>
-<pre><code>#define PERIPH_BASE			((unsigned int)0x40000000)
-#define APB2PERIPH_BASE		(PERIPH_BASE + 0x00010000)
-#define GPIO_BASE			(APB2PERIPH_BASE + 0x0C00)
-#define GPIO_ODR			*(unisgned int*)(GPIO_BASE + 0x0C)
-
-//PB0输出低电平
-GPIO_ODR &amp;= ~(1&lt;&lt;0);
-//PB0输出高电平
-GPIO_ODR |= (1&lt;&lt;0)
-</code></pre><p>（GPIO_BASE + 0x0C）对应GPIO_ODR寄存器地址
-（unsigned int*） 将（GPIO_BASE + 0x0C）强制转化为指针
-（*）指针操作，指向GPIO_ODR地址</p>
-<h2 id="结构体封装">结构体封装</h2>
-<pre><code>typedef unsigned int 	uint32_t;		 /*无符号32位变量*/
-typedef unsigned short int	uint16_t;	/*无符号16位变量*/
-
-/*GPIO寄存器列表*/
-typedef struct{
-	uint32_t 	CRL;	/*地址偏移0x00*/
-	uint32_t	CRH;	/*地址偏移0x04*/
-	uint32_t	IDR;	/*地址偏移0x08*/
-	uint32_t	ODR;	/*地址偏移0x0C*/
-	uint32_t	BSRR;	/*地址偏移0x10*/
-	uint32_t	BRR;	/*地址偏移0x14*/
-	uint32_t	LCKR;	/*地址偏移0x18*/
-}GPIO_TypeDef;
-
-GPIO_TypeDef* GPIOx;
-GPIOx = GPIO_BASE;
-GPIO-&gt;ODR = 0xFFFFE;
-</code></pre>]]></content>
 		</item>
 		
 	</channel>

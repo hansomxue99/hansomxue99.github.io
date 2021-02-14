@@ -22,7 +22,7 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&amp;#39;\n&amp;#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
     </item>
     
   </channel>

@@ -22,11 +22,11 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&amp;#39;\n&amp;#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
     </item>
     
     <item>
-      <title>Uart异步串口通信</title>
+      <title>UART异步串口通信</title>
       <link>https://hansomxue99.github.io/posts/uart/</link>
       <pubDate>Wed, 10 Feb 2021 10:48:50 +0800</pubDate>
       
@@ -37,16 +37,6 @@
   TXE（发送数据寄存器空），当数据全部移入发送移位寄存器时，置1 TC（发送完成），当一帧数据发送完成，且TXE=1时，置1 RXNE（读数据寄存器非空），当有数据读入数据寄存器USART_DR时，置1   数据寄存器USART_DR，发送或接收缓存数据
   控制寄存器1 USART_CR1，主要用于配置中断和使能
   UE（USART使能），TE（发送使能），RE（接收使能） TXEIE 发送缓冲区空中断使能 TCIE 发送完成中断使能 RXNEIE 接收缓冲区非空中断使能  （3）STM32基本配置：波特率，数据位，奇偶校验位，停止位，串口/中断使能 3. UART发送数据 （1）首先是对UART串口的初始化配置 （2）调用函数 HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)  huart是UART句柄结构体（姑且先这么叫） pData是待发送的字符数组，每次发送前都需要进行一次读写，可以调用sprintf函数 Size是指pData字符数组的长度，一般是strlen(pData) Timeout是待发送数据的生存时间，若超时会返回HAL_TIMEOUT  （3）自定义函数usUART_sendString(UART_HandleTypeDef *huart, uint8_t *pData)  这是根据HAL库发送函数由用户进行改写的字符串发送函数，形参只有两个 函数编写借鉴51单片机串口思想，代码编写如下：  void usUart_sendString(UART_HandleTypeDef *huart, uint8_t *pData) { /* 判断是否发送完成 */ while(*pData) { /* 每次发送一个字符 */ HAL_StatusTypeDef HAL_UART_Transmit(huart, pData, 1, 0xffff); /* 字符指针移位，指向下一个字符的内容 */ pData++; } } 4.</description>
-    </item>
-    
-    <item>
-      <title>STM32学习笔记——寄存器映射</title>
-      <link>https://hansomxue99.github.io/posts/myfirstblog/</link>
-      <pubDate>Mon, 08 Feb 2021 11:06:24 +0800</pubDate>
-      
-      <guid>https://hansomxue99.github.io/posts/myfirstblog/</guid>
-      <description>存储器映射  总线基地址     总线名称 总线基地址      APB1 0x4000 0000    APB2 0x4001 0000    AHB 0x4000 8000     GPIO基地址  GPIO端口挂在总线APB2上
-   端口名称 端口基地址      GPIOA 0x4001 0800    GPIOB 0x4001 0C00    GPIOC 0x4001 1000    GPIOD 0x4001 1400    GPIOE 0x4001 1800    GPIOF 0x4001 1C00    GPIOG 0x4001 2000     每个端口的基地址相差0x400</description>
     </item>
     
   </channel>

@@ -16,10 +16,10 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength&#43;&#43;]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.">
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength&#43;&#43;]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.">
 <meta itemprop="datePublished" content="2021-02-13T09:42:04+08:00" />
 <meta itemprop="dateModified" content="2021-02-13T09:42:04+08:00" />
-<meta itemprop="wordCount" content="97">
+<meta itemprop="wordCount" content="165">
 
 
 
@@ -33,7 +33,7 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength&#43;&#43;]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;rec_dat, 1); } } /* USER CODE END 4 */ 4." />
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength&#43;&#43;]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;rec_dat, 1); } } /* USER CODE END 4 */ 4." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://hansomxue99.github.io/posts/uart_it/" />
 <meta property="article:published_time" content="2021-02-13T09:42:04+08:00" />
@@ -48,7 +48,7 @@
  先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 （2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
 （3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength&#43;&#43;]=rec_dat; } //重新使能串口接收中断 HAL_UART_Receive_IT(huart, &amp;rec_dat, 1); } } /* USER CODE END 4 */ 4."/>
+/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&gt;Instance == USART1) { if(rec_dat==&#39;\n&#39;) { HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength&#43;&#43;]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;rec_dat, 1); } } /* USER CODE END 4 */ 4."/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -150,30 +150,70 @@
 <code>__weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)</code></p>
 <p>（2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。</p>
 <p>（3）重定义串口中断回调函数</p>
-<pre><code>/* USER CODE BEGIN 4 */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-	/* 判断是哪个串口触发的中断 */
-	if(huart -&gt;Instance == USART1)
-	{
-			if(rec_dat=='\n')
-			{
-				HAL_UART_Transmit_IT(&amp;huart1, rec_buf, ulength);
-				ulength=0;
-			}
-			else
-			{
-				rec_buf[ulength++]=rec_dat;
-			}
-			//重新使能串口接收中断
-			HAL_UART_Receive_IT(huart, &amp;rec_dat, 1);
-	}
-}
-/* USER CODE END 4 */
-</code></pre><h2 id="4-串口收发">4. 串口收发<a href="#4-串口收发" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* USER CODE BEGIN 4 */</span>
+<span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="cm">/* 判断是哪个串口触发的中断 */</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">huart</span> <span class="o">-&gt;</span><span class="n">Instance</span> <span class="o">==</span> <span class="n">USART1</span><span class="p">)</span>
+	<span class="p">{</span>
+			<span class="k">if</span><span class="p">(</span><span class="n">rec_dat</span><span class="o">==</span><span class="sc">&#39;\n&#39;</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">HAL_UART_Transmit_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">rec_buf</span><span class="p">,</span> <span class="n">ulength</span><span class="p">);</span>
+				<span class="n">ulength</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="k">else</span>
+			<span class="p">{</span>
+				<span class="n">rec_buf</span><span class="p">[</span><span class="n">ulength</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">rec_dat</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="c1">//重新使能串口接收中断
+</span><span class="c1"></span>			<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="n">huart</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rec_dat</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/* USER CODE END 4 */</span>
+</code></pre></div><h2 id="4-串口收发">4. 串口收发<a href="#4-串口收发" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <p>（1）发送使用函数<code>HAL_UART_Transmit_IT</code></p>
+<ul>
+<li>注意：<code>HAL_UART_Transmit_IT</code>不能连续使用，只会发送第二次</li>
+<li>要想连续使用<code>HAL_UART_Transmit_IT</code>，必须添加代码<code>while(huart1.gState != HAL_UART_STATE_READY);</code></li>
+<li>串口发送一般不使用中断，而使用轮询模式</li>
+</ul>
 <p>（2）接收前必须先要使能中断接收，使用函数<code>HAL_UART_Receive_IT</code></p>
-<h2 id="参考资料">参考资料<a href="#参考资料" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="5-串口发送printf的重定向">5. 串口发送printf的重定向<a href="#5-串口发送printf的重定向" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>所以，重定向fputc()函数完整的代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if 1
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cm">/* 告知连接器不从C库链接使用半主机的函数 */</span>
+<span class="cp">#pragma import(__use_no_semihosting)
+</span><span class="cp"></span>
+<span class="cm">/* 定义 _sys_exit() 以避免使用半主机模式 */</span>
+<span class="kt">void</span> <span class="nf">_sys_exit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* 标准库需要的支持类型 */</span>
+<span class="k">struct</span> <span class="n">__FILE</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">handle</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">FILE</span> <span class="n">__stdout</span><span class="p">;</span>
+
+<span class="cm">/*  */</span>
+<span class="kt">int</span> <span class="nf">fputc</span><span class="p">(</span><span class="kt">int</span> <span class="n">ch</span><span class="p">,</span> <span class="n">FILE</span> <span class="o">*</span><span class="n">stream</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* 堵塞判断串口是否发送完成 */</span>
+    <span class="k">while</span><span class="p">((</span><span class="n">USART1</span><span class="o">-&gt;</span><span class="n">ISR</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="n">X40</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="cm">/* 串口发送完成，将该字符发送 */</span>
+    <span class="n">USART1</span><span class="o">-&gt;</span><span class="n">TDR</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8_t</span><span class="p">)</span> <span class="n">ch</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">ch</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">#endif
+</span></code></pre></div><h2 id="参考资料">参考资料<a href="#参考资料" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 <ul>
 <li><a href="http://www.mculover666.cn/posts/2504113390/">STM32CubeMX_05 | 使用EXIT中断检测按键</a></li>
 </ul>
@@ -184,13 +224,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://hansomxue99.github.io/tags/stm32">STM32</a></span><span class="tag"><a href="https://hansomxue99.github.io/tags/%E4%B8%B2%E5%8F%A3">串口</a></span><span class="tag"><a href="https://hansomxue99.github.io/tags/%E5%BC%82%E6%AD%A5%E9%80%9A%E4%BF%A1">异步通信</a></span><span class="tag"><a href="https://hansomxue99.github.io/tags/%E4%B8%AD%E6%96%AD">中断</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>97 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>165 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-02-13 09:42 &#43;0800</p>
 			</footer>
 		</article>
 		<div class="post-nav thin">
 			<a class="prev-post" href="https://hansomxue99.github.io/posts/uart/">
-				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Uart异步串口通信</span>
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>UART异步串口通信</span>
 			</a>
 		</div>
 		<div id="comments" class="thin">
