@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DirectX.Sound on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/directx.sound/</link>
+    <description>Recent content in DirectX.Sound on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 26 Apr 2021 20:28:28 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/directx.sound/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#声音捕获基础</title>
+      <link>https://hansomxue99.github.io/posts/c_capturesound/</link>
+      <pubDate>Mon, 26 Apr 2021 20:28:28 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/c_capturesound/</guid>
+      <description>using Microsoft.DirectX.DirectSound;
+  Capture;	//音频捕捉设备 CaptureBuffer;	//缓冲区对象 WaveFormat;	//录音格式   设置录音参数
+private WaveFormat mWaveFormat; private WaveFormat CreateWaveFormat() { WaveFormat waveformat = new WaveFormat(); waveformat.FormatTag = WaveFormatTag.Pcm;	//音频类型设为PCM  waveformat.SamplesPerSecond = 11025;	//采样率典型值：11025、22050、44100Hz(为了简化程序，暂且设为定值)  waveformat.BitsPerSample = 16;	//采样位数  waveformat.Channels = 2;	//声道：1单声道，2立体声  waveformat.BlockAlign = (short)(waveformat.Channels * (waveformat.BitsPerSample / 8));//单位采样点的字节数  waveformat.AverageBytesPerSecond = waveformat.BlockAlign * waveformat.SamplesPerSecond; return waveformat; // 按照以上采样规格，可知采样1秒钟的字节数为 11025*2=32000B 约为22K } //mWaveFormat = CreateWaveFormat();   初始化录音设备</description>
+    </item>
+    
+  </channel>
+</rss>

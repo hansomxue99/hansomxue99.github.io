@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Team&#39;s blog</title>
-    <link>https://hansomxue99.github.io/</link>
-    <description>Recent content on Team&#39;s blog</description>
+    <title>C# on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/c#/</link>
+    <description>Recent content in C# on Team&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 26 Apr 2021 20:28:28 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Apr 2021 20:28:28 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/c#/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>C#声音捕获基础</title>
       <link>https://hansomxue99.github.io/posts/c_capturesound/</link>
@@ -59,15 +59,6 @@ private void box1_Keypress(object sender, KeypressEventArgs e) { char ch = e.Key
       
       <guid>https://hansomxue99.github.io/posts/c_class/</guid>
       <description>C#面向对象 1. 新建类和创建对象 //新建类 public class Point{ public int x,y;	//成员变量  public Piont(int x, int y){	//构造函数：函数名与类名一致，用于给对象初始化  this.x = x; this.y = y; } } //创建对象 Point p1 = new Piont(10,10);	//new关键字新建对象 2. 创建子类 //创建Piont的子类Point3D public class Point3D: Point{ public int z;	//子类对象会继承父类的public类型的成员 	public Point3D(int x, int y, int z){ //省略Point(x,y);这是因为在创建子类时，父类已经初始化，不必重复声明 	this.z = z;	//只需执行z的初始化 	} } //创建Point3D对象 //第一种方法 Point3D p2 = new Point3D(10,20,30); //第二种方法 Point p2 = new Point3D(10,20,30); 3.</description>
-    </item>
-    
-    <item>
-      <title>关于</title>
-      <link>https://hansomxue99.github.io/about-hugo/</link>
-      <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://hansomxue99.github.io/about-hugo/</guid>
-      <description>本站用于记录学习过程中的一些思考！</description>
     </item>
     
   </channel>

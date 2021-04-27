@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A/D转换 on hansomxue99&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/a/d%E8%BD%AC%E6%8D%A2/</link>
+    <description>Recent content in A/D转换 on hansomxue99&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><atom:link href="https://hansomxue99.github.io/tags/a/d%E8%BD%AC%E6%8D%A2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adc</title>
+      <link>https://hansomxue99.github.io/posts/adc/</link>
+      <pubDate>Sun, 14 Feb 2021 15:46:31 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/adc/</guid>
+      <description>1. STM32 ADC主要配置参数 hadc2.Init.Resolution = ADC_RESOLUTION_12B; //分辨率12bit hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT; //转换数据右对齐 hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE; //扫描模式关闭 hadc2.Init.ContinuousConvMode = DISABLE; //连续转换模式关闭 hadc2.Init.DiscontinuousConvMode = DISABLE; //间断模式关闭 hadc2.Init.NbrOfConversion = 1; //通道数1 hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START; //触发方式，此处为软件触发 hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE; //触发方式边缘，软件触发此处设为NONE 2. 参数解析 （1）A/D 转换的几种工作模式：单次、连续、扫描、间断模式
+ 单次模式：只转换一次数据 连续模式：连续转换数据 扫描模式：多通道转换时使用  （2）输入电压范围：（-VREF,+VREF）
+（3）转换时：规则通道转换，注入通道转换；一般采用规则通道转换
+（4）触发源：软件触发，外部触发（定时器，中断等）
+（5）转换时间=采样周期+12.5 个时钟周期
+ STM32G4 ADC最大时钟频率？  3. stm32g4 adc转换时间计算 首先，要知道stm32f1的adc转换时间是：转换时间=sampling_time+12.5个时钟周期，f1的最小转换时间=1.5+12.5=14个时钟周期，其中最大时钟频率是14MHz，也就是说f1的adc最短转换时间为1us。
+可以类比假设（这里没有找到g4的adc转换时间计算公式，我们姑且认为和f1一致），则g4转换时间：转换时间=sampling_time+12.5个时钟周期，g4的最小转换时间=2.5+12.5=15个时钟周期，则以80MHz时钟频率的adc最短转换时间为0.1875us。
+要知道，根据奈奎斯特采样定理，采样频率应该大于两倍的输入信号频率，这可以通过定时器控制。同时应该注意的是，两次采样间隔应该大于adc的转换时间（否则adc来不及转换采集的数据而会导致数据丢失或出错），从这一点我们可以知道，f1、g4的采样频率不能设置很高，f1最多设置为1MHz，而g4最多设置为5.3MHz左右（以80MHz的时钟频率为例）。</description>
+    </item>
+    
+  </channel>
+</rss>

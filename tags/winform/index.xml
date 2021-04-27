@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Winform on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/winform/</link>
+    <description>Recent content in Winform on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Mon, 26 Apr 2021 20:26:42 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/winform/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#窗体程序基础</title>
+      <link>https://hansomxue99.github.io/posts/c_winform/</link>
+      <pubDate>Mon, 26 Apr 2021 20:26:42 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/c_winform/</guid>
+      <description>Form和Form.Designer的关系：Form的构造方法调用了Form.Designer中的InitializeComponent方法
+  读取时间：
+string timeStr = DateTime.Now.ToString(&amp;#34;yyyy-MM-dd HH:mm:ss&amp;#34;); //文本框显示 textBox.Text = timeStr;   两个字段属性的区别：Name和Text。
+  手工布局——&amp;gt;窗口自适应
+//重写父类的方法 protected override void Onlayout(LayoutEventArgs levent) { //1. 调用父类的layout  base.OnLayout(levent); //2. 获取客户区的窗口大小 ClientSize(注意是客户区，不包含标题栏)  int w = this.ClientSize.Width; int h = this.ClientSize.Height; //3. 根据需求，计算每一个控件的大小和位置 } 注意：文本框AutoSize设为false；窗口大小改变时，系统框架会自动调用OnLayout()方法。
+  Anchor和Dock属性不能同时设置
+  textbox
+private void box1_Keypress(object sender, KeypressEventArgs e) { char ch = e.KeyChar; if(ch == &amp;#39;\r&amp;#39;) { string str = box1.</description>
+    </item>
+    
+  </channel>
+</rss>

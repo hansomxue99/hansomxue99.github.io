@@ -1,313 +1,622 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Posts on hansomxue99&#39;s blog</title>
+		<title>Posts on Team&#39;s blog</title>
 		<link>https://hansomxue99.github.io/posts/</link>
-		<description>Recent content in Posts on hansomxue99&#39;s blog</description>
+		<description>Recent content in Posts on Team&#39;s blog</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-CN</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Sat, 13 Feb 2021 09:42:04 +0800</lastBuildDate>
+		<lastBuildDate>Mon, 26 Apr 2021 20:28:28 +0800</lastBuildDate>
 		<atom:link href="https://hansomxue99.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
-			<title>基于HAL中断的串口收发</title>
-			<link>https://hansomxue99.github.io/posts/uart_it/</link>
-			<pubDate>Sat, 13 Feb 2021 09:42:04 +0800</pubDate>
+			<title>C#声音捕获基础</title>
+			<link>https://hansomxue99.github.io/posts/c_capturesound/</link>
+			<pubDate>Mon, 26 Apr 2021 20:28:28 +0800</pubDate>
 			
-			<guid>https://hansomxue99.github.io/posts/uart_it/</guid>
-			<description>1. 串口中断的配置——使用cubemx软件 （1）配置时钟
-（2）配置通用GPIO
-（3）使能串口：GPIO、串口基本参数、NVIC中断函数
-2. HAL库中断处理机制 （1）NVIC，嵌套向量中断控制器，用来决定中断的优先级；NVIC在Conrtex-M内核中（2）中断优先级用一个8位寄存器来进行配置，其中低4位全部置为0（为节约内核资源），因此只有高4为配置优先级。中断优先级分为五个分组，它们的抢占优先级和子优先级都不同，具体如下表：
-   优先级分组 抢占优先级占的位数 子优先级占的位数     NVIC_PriorityGroup_0 0 bit 4 bit   NVIC_PriorityGroup_1 1 bit 3 bit   NVIC_PriorityGroup_2 2 bit 2 bit   NVIC_PriorityGroup_3 3 bit 1 bit   NVIC_PriorityGroup_4 4 bit 0 bit    （3）CPU优先级的判断
- 先判断抢占优先级，数字越小，优先级越高； 若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。  3. HAL中断回调函数 （1）中断的实现一般是通过中断回调函数，如： __weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-（2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。
-（3）重定义串口中断回调函数
-/* USER CODE BEGIN 4 */ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) { /* 判断是哪个串口触发的中断 */ if(huart -&amp;gt;Instance == USART1) { if(rec_dat==&amp;#39;\n&amp;#39;) { HAL_UART_Transmit_IT(&amp;amp;huart1, rec_buf, ulength); ulength=0; } else { rec_buf[ulength++]=rec_dat; } //重新使能串口接收中断 	HAL_UART_Receive_IT(huart, &amp;amp;rec_dat, 1); } } /* USER CODE END 4 */ 4.</description>
-			<content type="html"><![CDATA[<h2 id="1-串口中断的配置使用cubemx软件">1. 串口中断的配置——使用cubemx软件</h2>
-<p>（1）配置时钟</p>
-<p>（2）配置通用GPIO</p>
-<p>（3）使能串口：GPIO、串口基本参数、NVIC中断函数</p>
-<h2 id="2-hal库中断处理机制">2. HAL库中断处理机制</h2>
-<p>（1）NVIC，嵌套向量中断控制器，用来决定中断的优先级；NVIC在Conrtex-M内核中<!-- raw HTML omitted -->
-（2）中断优先级用一个8位寄存器来进行配置，其中低4位全部置为0（为节约内核资源），因此只有高4为配置优先级。中断优先级分为五个分组，它们的抢占优先级和子优先级都不同，具体如下表：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">优先级分组</th>
-<th style="text-align:center">抢占优先级占的位数</th>
-<th style="text-align:center">子优先级占的位数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">NVIC_PriorityGroup_0</td>
-<td style="text-align:center">0 bit</td>
-<td style="text-align:center">4 bit</td>
-</tr>
-<tr>
-<td style="text-align:left">NVIC_PriorityGroup_1</td>
-<td style="text-align:center">1 bit</td>
-<td style="text-align:center">3 bit</td>
-</tr>
-<tr>
-<td style="text-align:left">NVIC_PriorityGroup_2</td>
-<td style="text-align:center">2 bit</td>
-<td style="text-align:center">2 bit</td>
-</tr>
-<tr>
-<td style="text-align:left">NVIC_PriorityGroup_3</td>
-<td style="text-align:center">3 bit</td>
-<td style="text-align:center">1 bit</td>
-</tr>
-<tr>
-<td style="text-align:left">NVIC_PriorityGroup_4</td>
-<td style="text-align:center">4 bit</td>
-<td style="text-align:center">0 bit</td>
-</tr>
-</tbody>
-</table>
-<p>（3）CPU优先级的判断</p>
-<ul>
-<li>先判断抢占优先级，数字越小，优先级越高；</li>
-<li>若抢占优先级相同，判断子优先级，同样，数字越小，优先级越高。</li>
-</ul>
-<h2 id="3-hal中断回调函数">3. HAL中断回调函数</h2>
-<p>（1）中断的实现一般是通过中断回调函数，如：
-<code>__weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)</code></p>
-<p>（2）中断回调函数函数用__weak进行声明，表明该函数是虚函数，用户调用中断时需要对其进行重定义，可以在工程任意文件下进行重定义。</p>
-<p>（3）重定义串口中断回调函数</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* USER CODE BEGIN 4 */</span>
-<span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+			<guid>https://hansomxue99.github.io/posts/c_capturesound/</guid>
+			<description>using Microsoft.DirectX.DirectSound;
+  Capture;	//音频捕捉设备 CaptureBuffer;	//缓冲区对象 WaveFormat;	//录音格式   设置录音参数
+private WaveFormat mWaveFormat; private WaveFormat CreateWaveFormat() { WaveFormat waveformat = new WaveFormat(); waveformat.FormatTag = WaveFormatTag.Pcm;	//音频类型设为PCM  waveformat.SamplesPerSecond = 11025;	//采样率典型值：11025、22050、44100Hz(为了简化程序，暂且设为定值)  waveformat.BitsPerSample = 16;	//采样位数  waveformat.Channels = 2;	//声道：1单声道，2立体声  waveformat.BlockAlign = (short)(waveformat.Channels * (waveformat.BitsPerSample / 8));//单位采样点的字节数  waveformat.AverageBytesPerSecond = waveformat.BlockAlign * waveformat.SamplesPerSecond; return waveformat; // 按照以上采样规格，可知采样1秒钟的字节数为 11025*2=32000B 约为22K } //mWaveFormat = CreateWaveFormat();   初始化录音设备</description>
+			<content type="html"><![CDATA[<ol>
+<li>
+<p><code>using Microsoft.DirectX.DirectSound;</code></p>
+</li>
+<li>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="n">Capture</span><span class="p">;</span>		<span class="c1">//音频捕捉设备
+</span><span class="c1"></span><span class="n">CaptureBuffer</span><span class="p">;</span>	<span class="c1">//缓冲区对象
+</span><span class="c1"></span><span class="n">WaveFormat</span><span class="p">;</span>		<span class="c1">//录音格式
+</span></code></pre></div></li>
+<li>
+<p>设置录音参数</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">mWaveFormat</span><span class="p">;</span>
+   
+<span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">CreateWaveFormat</span><span class="p">()</span>
 <span class="p">{</span>
-	<span class="cm">/* 判断是哪个串口触发的中断 */</span>
-	<span class="k">if</span><span class="p">(</span><span class="n">huart</span> <span class="o">-&gt;</span><span class="n">Instance</span> <span class="o">==</span> <span class="n">USART1</span><span class="p">)</span>
-	<span class="p">{</span>
-			<span class="k">if</span><span class="p">(</span><span class="n">rec_dat</span><span class="o">==</span><span class="sc">&#39;\n&#39;</span><span class="p">)</span>
-			<span class="p">{</span>
-				<span class="n">HAL_UART_Transmit_IT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">rec_buf</span><span class="p">,</span> <span class="n">ulength</span><span class="p">);</span>
-				<span class="n">ulength</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-			<span class="p">}</span>
-			<span class="k">else</span>
-			<span class="p">{</span>
-				<span class="n">rec_buf</span><span class="p">[</span><span class="n">ulength</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">rec_dat</span><span class="p">;</span>
-			<span class="p">}</span>
-			<span class="c1">//重新使能串口接收中断
-</span><span class="c1"></span>			<span class="n">HAL_UART_Receive_IT</span><span class="p">(</span><span class="n">huart</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rec_dat</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-	<span class="p">}</span>
+    <span class="n">WaveFormat</span> <span class="n">waveformat</span> <span class="p">=</span> <span class="k">new</span> <span class="n">WaveFormat</span><span class="p">();</span>
+    <span class="n">waveformat</span><span class="p">.</span><span class="n">FormatTag</span> <span class="p">=</span> <span class="n">WaveFormatTag</span><span class="p">.</span><span class="n">Pcm</span><span class="p">;</span>	<span class="c1">//音频类型设为PCM
+</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">SamplesPerSecond</span> <span class="p">=</span> <span class="m">11025</span><span class="p">;</span>		<span class="c1">//采样率典型值：11025、22050、44100Hz(为了简化程序，暂且设为定值)
+</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">=</span> <span class="m">16</span><span class="p">;</span>				<span class="c1">//采样位数  
+</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">Channels</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>					<span class="c1">//声道：1单声道，2立体声  
+</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">BlockAlign</span> <span class="p">=</span> <span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">waveformat</span><span class="p">.</span><span class="n">Channels</span> <span class="p">*</span> <span class="p">(</span><span class="n">waveformat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">/</span> <span class="m">8</span><span class="p">));</span><span class="c1">//单位采样点的字节数  
+</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">AverageBytesPerSecond</span> <span class="p">=</span> <span class="n">waveformat</span><span class="p">.</span><span class="n">BlockAlign</span> <span class="p">*</span> <span class="n">waveformat</span><span class="p">.</span><span class="n">SamplesPerSecond</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">waveformat</span><span class="p">;</span>
+    <span class="c1">// 按照以上采样规格，可知采样1秒钟的字节数为 11025*2=32000B 约为22K
+</span><span class="c1"></span><span class="p">}</span>
+   
+<span class="c1">//mWaveFormat = CreateWaveFormat();
+</span></code></pre></div></li>
+<li>
+<p>初始化录音设备</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">Capture</span> <span class="n">mCapDev</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//音频捕捉设备初始设为NULL
+</span><span class="c1"></span>   
+<span class="k">private</span> <span class="kt">bool</span> <span class="n">CreateCaptureDevice</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//枚举可用的录音设备  
+</span><span class="c1"></span>    <span class="n">CaptureDevicesCollection</span> <span class="n">capturedev</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureDevicesCollection</span><span class="p">();</span>
+    <span class="n">Guid</span> <span class="n">devguid</span> <span class="p">=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">capturedev</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+     <span class="n">devguid</span> <span class="p">=</span> <span class="n">capturedev</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">DriverGuid</span><span class="p">;</span> 	<span class="c1">//0选择默认录音设备
+</span><span class="c1"></span>    <span class="k">else</span>
+     <span class="c1">//MessageBox.Show(&#34;当前没有可用于音频捕捉的设备&#34;, &#34;系统提示&#34;);
+</span><span class="c1"></span>     <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+   
+    <span class="c1">//利用设备GUID来建立一个捕捉设备对象  
+</span><span class="c1"></span>    <span class="n">mCapDev</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Capture</span><span class="p">(</span><span class="n">devguid</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="cm">/* USER CODE END 4 */</span>
-</code></pre></div><h2 id="4-串口收发">4. 串口收发</h2>
-<p>（1）发送使用函数<code>HAL_UART_Transmit_IT</code></p>
-<ul>
-<li>注意：<code>HAL_UART_Transmit_IT</code>不能连续使用，只会发送第二次</li>
-<li>要想连续使用<code>HAL_UART_Transmit_IT</code>，必须添加代码<code>while(huart1.gState != HAL_UART_STATE_READY);</code></li>
-<li>串口发送一般不使用中断，而使用轮询模式</li>
-</ul>
-<p>（2）接收前必须先要使能中断接收，使用函数<code>HAL_UART_Receive_IT</code></p>
-<h2 id="5-串口发送printf的重定向">5. 串口发送printf的重定向</h2>
-<p>所以，重定向fputc()函数完整的代码如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if 1
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/* 告知连接器不从C库链接使用半主机的函数 */</span>
-<span class="cp">#pragma import(__use_no_semihosting)
-</span><span class="cp"></span>
-<span class="cm">/* 定义 _sys_exit() 以避免使用半主机模式 */</span>
-<span class="kt">void</span> <span class="nf">_sys_exit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+   
+<span class="c1">//CreateCaptureDevice();
+</span></code></pre></div></li>
+<li>
+<p>创建录音缓存区</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">CaptureBuffer</span> <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span><span class="c1">//录音缓冲区 
+</span><span class="c1"></span><span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">mWaveFormat</span><span class="p">;</span>
+   
+<span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifyNum</span> <span class="p">;</span>		<span class="c1">//通知的个数  
+</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifySize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>	<span class="c1">//通知所在区域大小 
+</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iBufferSize</span><span class="p">;</span>
+   
+<span class="k">private</span> <span class="k">void</span> <span class="n">CreateCaptureBuffer</span><span class="p">(</span> <span class="kt">int</span> <span class="n">bufferNum</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bufferSizeSeconds</span> <span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">iNotifyNum</span> <span class="p">=</span> <span class="n">bufferNum</span><span class="p">;</span>
+    <span class="c1">//缓冲区的描述对象
+</span><span class="c1"></span>    <span class="n">CaptureBufferDescription</span> <span class="n">bufferDesc</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureBufferDescription</span><span class="p">();</span>
+    <span class="n">bufferDesc</span><span class="p">.</span><span class="n">Format</span> <span class="p">=</span> <span class="n">mWaveFormat</span><span class="p">;</span>			<span class="c1">//1. 设置录音数据格式  
+</span><span class="c1"></span>    <span class="n">iNotifySize</span> <span class="p">=(</span><span class="kt">int</span><span class="p">)(</span> <span class="n">mWaveFormat</span><span class="p">.</span><span class="n">SamplesPerSecond</span> <span class="p">*</span> <span class="n">bufferSizeSeconds</span><span class="p">*</span> <span class="n">mWaveFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">);</span>
+    <span class="n">iBufferSize</span> <span class="p">=</span> <span class="n">iNotifyNum</span> <span class="p">*</span> <span class="n">iNotifySize</span><span class="p">;</span>
+    <span class="n">bufferDesc</span><span class="p">.</span><span class="n">BufferBytes</span> <span class="p">=</span> <span class="n">iBufferSize</span><span class="p">;</span>	<span class="c1">//2. 设置录音缓存大小
+</span><span class="c1"></span>    <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureBuffer</span><span class="p">(</span><span class="n">bufferDesc</span><span class="p">,</span> <span class="n">mCapDev</span><span class="p">);</span>	<span class="c1">//3. 创建录音缓冲区  
+</span><span class="c1"></span><span class="p">}</span>
+   
+<span class="c1">//CreateCaptureBffer(bufferNum, bufferSizeSeconds);
+</span></code></pre></div></li>
+<li>
+<p>创建缓存区录制通知</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">Notify</span> <span class="n">captureNotify</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>			<span class="c1">//缓冲区录制通知
+</span><span class="c1"></span><span class="k">private</span> <span class="n">AutoResetEvent</span> <span class="n">notifyevent</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//通知事件
+</span><span class="c1"></span>   
+<span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifyNum</span> <span class="p">;</span>		<span class="c1">//通知的个数  
+</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifySize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>	<span class="c1">//通知所在区域大小 
+</span><span class="c1"></span>   
+<span class="k">private</span> <span class="k">void</span> <span class="n">CreateNotification</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">BufferPositionNotify</span><span class="p">[]</span> <span class="n">bpn</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BufferPositionNotify</span><span class="p">[</span><span class="n">iNotifyNum</span><span class="p">];</span>		<span class="c1">//缓存位置通知点数组  
+</span><span class="c1"></span>    <span class="n">notifyevent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span> 	<span class="c1">//同步事件对象，初始化
+</span><span class="c1"></span>   
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">iNotifyNum</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="n">bpn</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Offset</span> <span class="p">=</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">iNotifySize</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span><span class="c1">//设置缓冲区位置，到达该位置发出通知  
+</span><span class="c1"></span>        <span class="n">bpn</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">EventNotifyHandle</span> <span class="p">=</span> <span class="n">notifyevent</span><span class="p">.</span><span class="n">Handle</span><span class="p">;</span><span class="c1">//设置通知事件，该事件发出通知
+</span><span class="c1"></span>    <span class="p">}</span>
+    <span class="n">captureNotify</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Notify</span><span class="p">(</span><span class="n">captureBuffer</span><span class="p">);</span> <span class="c1">//1. 创建captureBuffer录音缓存的通知
+</span><span class="c1"></span>    <span class="n">captureNotify</span><span class="p">.</span><span class="n">SetNotificationPositions</span><span class="p">(</span><span class="n">bpn</span><span class="p">);</span> <span class="c1">//2. 设置多个通知点
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div></li>
+<li>
+<p>以上工作都是前期准备，对录音设备的初始化，以下功能由用户自定义。</p>
+<p>（1）设备初始化</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="kt">bool</span> <span class="n">InitReciever</span><span class="p">(</span><span class="kt">int</span> <span class="n">bufferNums</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bufferSeconds</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">CreateWaveFormat</span><span class="p">();</span>		<span class="c1">//1.
+</span><span class="c1"></span> <span class="kt">bool</span> <span class="n">jud</span> <span class="p">=</span> <span class="n">CreateCaptureDevice</span><span class="p">();</span>	<span class="c1">//2.
+</span><span class="c1"></span>    <span class="k">if</span><span class="p">(!</span><span class="n">jud</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jud</span><span class="p">;</span>
+    <span class="n">CreateCaptureBuffer</span><span class="p">(</span><span class="n">bufferNums</span><span class="p">,</span> <span class="n">bufferSeconds</span><span class="p">);</span>
+    <span class="n">CreateNotification</span><span class="p">();</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
 <span class="p">}</span>
-
-<span class="cm">/* 标准库需要的支持类型 */</span>
-<span class="k">struct</span> <span class="n">__FILE</span>
+</code></pre></div><p>（2）设备开始录制和停止</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">Thread</span> <span class="n">notifythread</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//新建一个线程
+</span><span class="c1"></span><span class="k">private</span> <span class="n">CaptureBuffer</span> <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span><span class="c1">//录音缓冲区 
+</span><span class="c1"></span>   
+<span class="k">public</span> <span class="k">void</span> <span class="n">recStart</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">handle</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="n">FILE</span> <span class="n">__stdout</span><span class="p">;</span>
-
-<span class="cm">/*  */</span>
-<span class="kt">int</span> <span class="nf">fputc</span><span class="p">(</span><span class="kt">int</span> <span class="n">ch</span><span class="p">,</span> <span class="n">FILE</span> <span class="o">*</span><span class="n">stream</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="cm">/* 堵塞判断串口是否发送完成 */</span>
-    <span class="k">while</span><span class="p">((</span><span class="n">USART1</span><span class="o">-&gt;</span><span class="n">ISR</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="n">X40</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="cm">/* 串口发送完成，将该字符发送 */</span>
-    <span class="n">USART1</span><span class="o">-&gt;</span><span class="n">TDR</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8_t</span><span class="p">)</span> <span class="n">ch</span><span class="p">;</span>
-
-    <span class="k">return</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">notifythread</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="n">notifythread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
+    <span class="n">notifythread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="n">RecordData</span><span class="p">);</span> 		<span class="c1">//录音线程
+</span><span class="c1"></span>   
+    <span class="n">captureBuffer</span><span class="p">.</span><span class="n">Start</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>            
+    <span class="n">notifythread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>            
 <span class="p">}</span>
-
-<span class="cp">#endif
-</span></code></pre></div><h2 id="参考资料">参考资料</h2>
-<ul>
-<li><a href="http://www.mculover666.cn/posts/2504113390/">STM32CubeMX_05 | 使用EXIT中断检测按键</a></li>
-</ul>
+   
+<span class="k">public</span> <span class="k">void</span> <span class="n">recStop</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">notifythread</span> <span class="p">!=</span><span class="k">null</span> <span class="p">)</span>
+        <span class="n">notifythread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
+    <span class="n">captureBuffer</span><span class="p">.</span><span class="n">Stop</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></li>
+<li>
+<p>录音涉及双线程 <code>notifythread = new Thread(RecordData);</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="k">void</span> <span class="n">RecordData</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 等待缓冲区的通知消息  
+</span><span class="c1"></span>        <span class="n">notifyevent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
+        <span class="c1">// 录制数据  
+</span><span class="c1"></span>        <span class="n">RecordCapturedData</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>这里再次封装了一个数据记录函数</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">CaptureBuffer</span> <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span><span class="c1">//录音缓冲区 
+</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iLastPos</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span><span class="c1">//上一次读取数据位置 
+</span><span class="c1"></span>   
+<span class="k">private</span> <span class="k">void</span> <span class="n">RecordCapturedData</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">capturedata</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//字节数组存储捕获的数据
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">readpos</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">capturepos</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">locksize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+   
+    <span class="c1">//获取录制数据位置
+</span><span class="c1"></span>    <span class="n">captureBuffer</span><span class="p">.</span><span class="n">GetCurrentPosition</span><span class="p">(</span><span class="k">out</span> <span class="n">capturepos</span><span class="p">,</span> <span class="k">out</span> <span class="n">readpos</span><span class="p">);</span>
+    <span class="n">locksize</span> <span class="p">=</span> <span class="n">readpos</span> <span class="p">-</span> <span class="n">iLastPos</span><span class="p">;</span><span class="c1">//可以安全读取的数据大小  
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">locksize</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">locksize</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
+        <span class="n">locksize</span> <span class="p">+=</span> <span class="n">iBufferSize</span><span class="p">;</span><span class="c1">//循环缓冲区，指针绕回
+</span><span class="c1"></span>    <span class="c1">//读取录制好的数据
+</span><span class="c1"></span>    <span class="n">capturedata</span> <span class="p">=</span> <span class="p">(</span><span class="kt">byte</span><span class="p">[])</span><span class="n">captureBuffer</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">iLastPos</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="kt">byte</span><span class="p">),</span> <span class="n">LockFlag</span><span class="p">.</span><span class="n">FromWriteCursor</span><span class="p">,</span> <span class="n">locksize</span><span class="p">);</span>
+    <span class="c1">//处理接收到的数据
+</span><span class="c1"></span>    <span class="n">process</span><span class="p">?.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">capturedata</span><span class="p">);</span>
+   
+    <span class="n">iLastPos</span> <span class="p">+=</span> <span class="n">capturedata</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="n">iLastPos</span> <span class="p">%=</span> <span class="n">iBufferSize</span><span class="p">;</span><span class="c1">//取模是因为缓冲区是循环的。  
+</span><span class="c1"></span>    <span class="n">iSampleSize</span> <span class="p">+=</span> <span class="n">capturedata</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></li>
+<li>
+<p>值得一提的是，这里自定义了一个回调函数</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="n">OnRecieveData</span><span class="p">(</span><span class="kt">byte</span><span class="p">[]</span> <span class="n">model</span><span class="p">);</span> <span class="c1">//回调函数原型定义
+</span><span class="c1"></span>   
+<span class="k">public</span> <span class="n">OnRecieveData</span> <span class="n">process</span><span class="p">;</span><span class="c1">//接收数据处理代理：提供回调函数。收到数据时被调用
+</span></code></pre></div></li>
+</ol>
 ]]></content>
 		</item>
 		
 		<item>
-			<title>UART异步串口通信</title>
-			<link>https://hansomxue99.github.io/posts/uart/</link>
-			<pubDate>Wed, 10 Feb 2021 10:48:50 +0800</pubDate>
+			<title>C#多线程</title>
+			<link>https://hansomxue99.github.io/posts/c_multithread/</link>
+			<pubDate>Mon, 26 Apr 2021 20:27:32 +0800</pubDate>
 			
-			<guid>https://hansomxue99.github.io/posts/uart/</guid>
-			<description>1. 什么是UART？ （1）UART，通用异步收发器。相比于USART，UART收发是以字符为单位，没有CLK同步时钟。 （2）UART最主要的是三根数据线：  TXD发送引脚 RXD接收引脚 GND接地引脚  （3）UART比较重要的几个参数：  波特率：每秒传送的码元数，比如9600，115200 数据位：典型值5、6、8、9位 奇偶校验位：一般分为奇校验和偶校验或者无校验位 停止位：典型值1、1.5、2位  （4）UART工作示意图如下图所示：   UART工作模式
-  这是典型的UART异步通信模式，数据位为8，无奇偶校验位，一位停止位。UART串口发送一次包含：起始位，数据位（低位在前），奇偶校验位（可选），以及停止位。2. 以STM32为例，分析UART工作原理 （1）了解STM32串口主要特性  可编程数据字长度(8位或9位) 可配置的停止位-支持1或2个停止位 可配置的使用DMA的多缓冲器通信 单独的发送器和接收器使能位 检测标志：接收缓冲器满、发送缓冲器空、传输结束标志  （2）了解STM32串口主要寄存器 STM32串口工作流程如下图：   UART工作流程
-   状态寄存器USART_SR
-  TXE（发送数据寄存器空），当数据全部移入发送移位寄存器时，置1 TC（发送完成），当一帧数据发送完成，且TXE=1时，置1 RXNE（读数据寄存器非空），当有数据读入数据寄存器USART_DR时，置1   数据寄存器USART_DR，发送或接收缓存数据
-  控制寄存器1 USART_CR1，主要用于配置中断和使能
-  UE（USART使能），TE（发送使能），RE（接收使能） TXEIE 发送缓冲区空中断使能 TCIE 发送完成中断使能 RXNEIE 接收缓冲区非空中断使能  （3）STM32基本配置：波特率，数据位，奇偶校验位，停止位，串口/中断使能 3. UART发送数据 （1）首先是对UART串口的初始化配置 （2）调用函数 HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)  huart是UART句柄结构体（姑且先这么叫） pData是待发送的字符数组，每次发送前都需要进行一次读写，可以调用sprintf函数 Size是指pData字符数组的长度，一般是strlen(pData) Timeout是待发送数据的生存时间，若超时会返回HAL_TIMEOUT  （3）自定义函数usUART_sendString(UART_HandleTypeDef *huart, uint8_t *pData)  这是根据HAL库发送函数由用户进行改写的字符串发送函数，形参只有两个 函数编写借鉴51单片机串口思想，代码编写如下：  void usUart_sendString(UART_HandleTypeDef *huart, uint8_t *pData) { /* 判断是否发送完成 */ while(*pData) { /* 每次发送一个字符 */ HAL_StatusTypeDef HAL_UART_Transmit(huart, pData, 1, 0xffff); /* 字符指针移位，指向下一个字符的内容 */ pData++; } } 4.</description>
-			<content type="html"><![CDATA[<h2 id="1-什么是uart">1. 什么是UART？</h2>
-<h3 id="1uart通用异步收发器相比于usartuart收发是以字符为单位没有clk同步时钟">（1）UART，通用异步收发器。相比于USART，UART收发是以字符为单位，没有CLK同步时钟。</h3>
-<h3 id="2uart最主要的是三根数据线br">（2）UART最主要的是三根数据线：<!-- raw HTML omitted --></h3>
-<ul>
-<li>TXD发送引脚<!-- raw HTML omitted --></li>
-<li>RXD接收引脚<!-- raw HTML omitted --></li>
-<li>GND接地引脚<!-- raw HTML omitted --></li>
-</ul>
-<h3 id="3uart比较重要的几个参数br">（3）UART比较重要的几个参数：<!-- raw HTML omitted --></h3>
-<ul>
-<li>波特率：每秒传送的码元数，比如9600，115200<!-- raw HTML omitted --></li>
-<li>数据位：典型值5、6、8、9位<!-- raw HTML omitted --></li>
-<li>奇偶校验位：一般分为奇校验和偶校验或者无校验位<!-- raw HTML omitted --></li>
-<li>停止位：典型值1、1.5、2位<!-- raw HTML omitted --></li>
-</ul>
-<h3 id="4uart工作示意图如下图所示">（4）UART工作示意图如下图所示：</h3>
-<figure>
-    <img src="https://img-blog.csdnimg.cn/20210210180902920.png"
-         alt="image"/> <figcaption>
-            <p>UART工作模式</p>
-        </figcaption>
-</figure>
+			<guid>https://hansomxue99.github.io/posts/c_multithread/</guid>
+			<description>C# 多线程 1. 创建线程 首先必须导入命名空间 using System.Threading; 创建的线程包括无参数和有参数。
+//创建无参线程 Thread t1 = new Thread(new ThreadStart(PrintNumbers));	//无参数的委托 t1.Start(); static void PrintNumbers(){...} //创建有参线程 Thread t2 = new Thread(new ParameterizedThreadStart(PrintNumbers));	//有参数的委托 t2.Start(10); static void PrintNumbers(object count){...}	//参数类型声明为object 2. AutoResetEvent 1）对象实例化
+AutoResetEvent autoResetEvent = new AutoResetEvent(false); false：无信号，子线程的WaitOne方法不会被自动调用
+true：有信号，子线程的WaitOne方法会被自动调用
+2）WaitOne 方法
+组织当前线程继续运行，等待其他线程发送信号。
+3）Set方法
+示例：
+static AutoResetEvent autoResetEvent = new AutoResetEvent(true); static void Main(string[] args) { //开启一个读线程(子线程)  Thread readerThread = new Thread(new ThreadStart(ReadThreadProc)); readerThread.Name = &amp;#34;ReaderThread&amp;#34;; readerThread.</description>
+			<content type="html"><![CDATA[<h2 id="c-多线程">C# 多线程</h2>
+<h3 id="1-创建线程">1. 创建线程</h3>
+<p>首先必须导入命名空间 <code>using System.Threading;</code> 创建的线程包括无参数和有参数。</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建无参线程
+</span><span class="c1"></span><span class="n">Thread</span> <span class="n">t1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ThreadStart</span><span class="p">(</span><span class="n">PrintNumbers</span><span class="p">));</span>		<span class="c1">//无参数的委托
+</span><span class="c1"></span><span class="n">t1</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
 
-<p>这是典型的UART异步通信模式，数据位为8，无奇偶校验位，一位停止位。UART串口发送一次包含：起始位，数据位（低位在前），奇偶校验位（可选），以及停止位。<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
-<h2 id="2-以stm32为例分析uart工作原理">2. 以STM32为例，分析UART工作原理</h2>
-<h3 id="1了解stm32串口主要特性">（1）了解STM32串口主要特性</h3>
-<ul>
-<li>可编程数据字长度(8位或9位)</li>
-<li>可配置的停止位-支持1或2个停止位</li>
-<li>可配置的使用DMA的多缓冲器通信</li>
-<li>单独的发送器和接收器使能位</li>
-<li>检测标志：接收缓冲器满、发送缓冲器空、传输结束标志</li>
-</ul>
-<h3 id="2了解stm32串口主要寄存器">（2）了解STM32串口主要寄存器</h3>
-<p>STM32串口工作流程如下图：
-<figure>
-    <img src="https://img-blog.csdnimg.cn/20210210183410273.png"
-         alt="image"/> <figcaption>
-            <p>UART工作流程</p>
-        </figcaption>
-</figure>
-</p>
-<blockquote>
-<p>状态寄存器USART_SR</p>
-</blockquote>
-<ul>
-<li>TXE（发送数据寄存器空），当数据全部移入发送移位寄存器时，置1</li>
-<li>TC（发送完成），当一帧数据发送完成，且TXE=1时，置1</li>
-<li>RXNE（读数据寄存器非空），当有数据读入数据寄存器USART_DR时，置1</li>
-</ul>
-<blockquote>
-<p>数据寄存器USART_DR，发送或接收缓存数据</p>
-</blockquote>
-<blockquote>
-<p>控制寄存器1 USART_CR1，主要用于配置中断和使能</p>
-</blockquote>
-<ul>
-<li>UE（USART使能），TE（发送使能），RE（接收使能）</li>
-<li>TXEIE 发送缓冲区空中断使能</li>
-<li>TCIE 发送完成中断使能</li>
-<li>RXNEIE 接收缓冲区非空中断使能</li>
-</ul>
-<h3 id="3stm32基本配置波特率数据位奇偶校验位停止位串口中断使能">（3）STM32基本配置：波特率，数据位，奇偶校验位，停止位，串口/中断使能</h3>
-<h2 id="3-uart发送数据">3. UART发送数据</h2>
-<h3 id="1首先是对uart串口的初始化配置">（1）首先是对UART串口的初始化配置</h3>
-<h3 id="2调用函数-hal_statustypedef-hal_uart_transmituart_handletypedef-huart-uint8_t-pdata-uint16_t-size-uint32_t-timeout">（2）调用函数 <code>HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></h3>
-<ul>
-<li>huart是UART句柄结构体（姑且先这么叫）</li>
-<li>pData是待发送的字符数组，每次发送前都需要进行一次读写，可以调用sprintf函数</li>
-<li>Size是指pData字符数组的长度，一般是<code>strlen(pData)</code></li>
-<li>Timeout是待发送数据的生存时间，若超时会返回HAL_TIMEOUT</li>
-</ul>
-<h3 id="3自定义函数usuart_sendstringuart_handletypedef-huart-uint8_t-pdata">（3）自定义函数<code>usUART_sendString(UART_HandleTypeDef *huart, uint8_t *pData)</code></h3>
-<ul>
-<li>这是根据HAL库发送函数由用户进行改写的字符串发送函数，形参只有两个</li>
-<li>函数编写借鉴51单片机串口思想，代码编写如下：</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">usUart_sendString</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">,</span> <span class="n">uint8_t</span> <span class="o">*</span><span class="n">pData</span><span class="p">)</span>
+<span class="k">static</span> <span class="k">void</span> <span class="n">PrintNumbers</span><span class="p">(){...}</span>
+
+<span class="c1">//创建有参线程
+</span><span class="c1"></span><span class="n">Thread</span> <span class="n">t2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ParameterizedThreadStart</span><span class="p">(</span><span class="n">PrintNumbers</span><span class="p">));</span>		<span class="c1">//有参数的委托
+</span><span class="c1"></span><span class="n">t2</span><span class="p">.</span><span class="n">Start</span><span class="p">(</span><span class="m">10</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">PrintNumbers</span><span class="p">(</span><span class="kt">object</span> <span class="n">count</span><span class="p">){...}</span>		<span class="c1">//参数类型声明为object
+</span></code></pre></div><h3 id="2-autoresetevent">2. AutoResetEvent</h3>
+<p>1）对象实例化</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="n">AutoResetEvent</span> <span class="n">autoResetEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+</code></pre></div><p>false：无信号，子线程的WaitOne方法不会被自动调用</p>
+<p>true：有信号，子线程的WaitOne方法会被自动调用</p>
+<p>2）WaitOne 方法</p>
+<p>组织当前线程继续运行，等待其他线程发送信号。</p>
+<p>3）Set方法</p>
+<p>示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">static</span> <span class="n">AutoResetEvent</span> <span class="n">autoResetEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="cm">/*
-</span><span class="cm">  判断是否发送完成
-</span><span class="cm">  */</span>
-  <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="n">pData</span><span class="p">)</span>   
-  <span class="p">{</span>
-    <span class="cm">/*
-</span><span class="cm">    每次发送一个字符
-</span><span class="cm">    */</span>
-    <span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="n">huart</span><span class="p">,</span> <span class="n">pData</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">);</span>
-    <span class="cm">/*
-</span><span class="cm">    字符指针移位，指向下一个字符的内容
-</span><span class="cm">    */</span>
-    <span class="n">pData</span><span class="o">++</span><span class="p">;</span>
-  <span class="p">}</span>
+    <span class="c1">//开启一个读线程(子线程)
+</span><span class="c1"></span>    <span class="n">Thread</span> <span class="n">readerThread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ThreadStart</span><span class="p">(</span><span class="n">ReadThreadProc</span><span class="p">));</span>
+    <span class="n">readerThread</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;ReaderThread&#34;</span><span class="p">;</span>
+    <span class="n">readerThread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="n">readWriteCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;MainThread writing : {0}&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+
+        <span class="c1">//主(写)线程将数据写入
+</span><span class="c1"></span>        <span class="n">myData</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="c1">//主(写)线程发信号，说明值已写过了
+</span><span class="c1"></span>        <span class="c1">//即通知正在等待的线程有事件发生
+</span><span class="c1"></span>        <span class="n">autoResetEvent</span><span class="p">.</span><span class="n">Set</span><span class="p">();</span>
+        
+        <span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//终止线程
+</span><span class="c1"></span>    <span class="n">readerThread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div><h2 id="4-uart接收">4. UART接收</h2>
-<h3 id="1首先对uart串口进行初始化">（1）首先对UART串口进行初始化</h3>
-<h3 id="2调用函数hal_statustypedef-hal_uart_receiveuart_handletypedef-huart-uint8_t-pdata-uint16_t-size-uint32_t-timeout">（2）调用函数<code>HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)</code></h3>
-<ul>
-<li>采用这种方法一般都是查询法，如下：</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* 判断是否接收成功 */</span>
-<span class="k">if</span><span class="p">(</span><span class="n">HAL_UART_Receive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">uRx_Data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">==</span> <span class="n">HAL_OK</span><span class="p">)</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">ReadThreadProc</span><span class="p">()</span>
 <span class="p">{</span>
-  <span class="cm">/* 将接收成功的数据通过串口发出来 */</span>
-  <span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">uRx_Data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//在数据被写入前，读线程等待（实际上是等待写线程发出数据写完的信号）
+</span><span class="c1"></span>        <span class="n">autoResetEvent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;{0} reading : {1}&#34;</span><span class="p">,</span> <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">myData</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><ul>
-<li>这种方式接收，必须事先知晓接收数据的长度，否则大概率会出错；其次，采用此方法会严重占用MCU的资源，尤其是放到while函数中。</li>
-<li>除此之外，若是采用中断的方法，像这样接收后直接处理，就会出现另一个问题，即，还未发送出去（移位寄存器还未清空）就直接进入下一次中断</li>
-</ul>
-<h3 id="3采用中断方式接收完成后再处理">（3）采用中断方式（接收完成后再处理）</h3>
-<ul>
-<li>首先需要配置中断，中断配置在此略过……</li>
-<li>中断函数代码编写如下：</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
-</span><span class="cm">* @brief This function handles USART1 global interrupt.
-</span><span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">USART1_IRQHandler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</code></pre></div><p>作业改写：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">static</span> <span class="n">AutoResetEvent</span> <span class="n">WriteEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">AutoResetEvent</span> <span class="n">ReadEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="n">Thread</span> <span class="n">readThread</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">Thread</span> <span class="n">writeThread</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="n">usData</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">uRx_Data</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">}</span>     <span class="p">;</span>    <span class="c1">//存储数组
-</span><span class="c1"></span>  <span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">pRx_Data</span>       <span class="o">=</span> <span class="n">uRx_Data</span><span class="p">;</span>    <span class="c1">//指向存储数组将要存储数据的位
-</span><span class="c1"></span>  <span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">uLength</span>        <span class="o">=</span>  <span class="mi">0</span>      <span class="p">;</span>    <span class="c1">//接收数据长度
+	<span class="k">if</span><span class="p">(</span><span class="n">readThread</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="n">readThread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
+    <span class="c1">//开启一个读线程(子线程)
+</span><span class="c1"></span>    <span class="n">readThread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ThreadStart</span><span class="p">(</span><span class="n">ReadThreadProc</span><span class="p">));</span>
+    <span class="n">readerThread</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;ReadThread&#34;</span><span class="p">;</span>
+    <span class="n">readerThread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+    
+    <span class="c1">//开启一个写线程(子线程)
+</span><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="n">writeThread</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="n">writeThread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
+    <span class="n">writeThread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ThreadStart</span><span class="p">(</span><span class="n">WriteThreadProc</span><span class="p">));</span>
+    <span class="n">writeThread</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;writeThread&#34;</span><span class="p">;</span>
+    <span class="n">readerThread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">WriteThreadProc</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">WriteEvent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;{0} Writing : {1}&#34;</span><span class="p">,</span> <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">usData</span><span class="p">);</span>
+        <span class="n">ReadEvent</span><span class="p">.</span><span class="n">Set</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">ReadThreadProc</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ReadEvent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;{0} Reading : {1}&#34;</span><span class="p">,</span> <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">usData</span><span class="p">++);</span>
+        <span class="n">Write</span><span class="p">.</span><span class="n">Set</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>进一步改写</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">static</span> <span class="n">AutoResetEvent</span> <span class="n">WriteEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="k">static</span> <span class="n">AutoResetEvent</span> <span class="n">ReadEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+
+<span class="k">static</span> <span class="n">Thread</span> <span class="n">readThread</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">Thread</span> <span class="n">writeThread</span><span class="p">;</span>
+
+<span class="kt">double</span> <span class="n">usData</span> <span class="p">=</span> <span class="m">0.0d</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">readThread</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="n">readThread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
+    <span class="c1">//开启一个读线程(子线程)
+</span><span class="c1"></span>    <span class="n">readThread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ThreadStart</span><span class="p">(</span><span class="n">ReadThreadProc</span><span class="p">));</span>
+    <span class="n">readThread</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;ReadThread&#34;</span><span class="p">;</span>
+    <span class="n">readThread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+    
+    <span class="c1">//开启一个写线程(子线程)
+</span><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="n">writeThread</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="n">writeThread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
+    <span class="n">writeThread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="k">new</span> <span class="n">ThreadStart</span><span class="p">(</span><span class="n">WriteThreadProc</span><span class="p">));</span>
+    <span class="n">writeThread</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="s">&#34;writeThread&#34;</span><span class="p">;</span>
+    <span class="n">writeThread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">WriteThreadProc</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">fre</span> <span class="p">=</span> <span class="m">1.0d</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">time</span> <span class="p">=</span> <span class="m">0.0d</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">delta</span> <span class="p">=</span> <span class="m">1</span><span class="p">/(</span><span class="kt">double</span><span class="p">)</span><span class="n">sample</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">WriteEvent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
+        <span class="c1">//Console.WriteLine(&#34;{0} Writing : {1}&#34;, Thread.CurrentThread.Name, usData);
+</span><span class="c1"></span>        <span class="n">usData</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">Sin</span><span class="p">(</span><span class="m">2.0f</span> <span class="p">*</span> <span class="n">Math</span><span class="p">.</span><span class="n">PI</span> <span class="p">*</span> <span class="n">fre</span> <span class="p">*</span> <span class="n">time</span><span class="p">);</span>
+        <span class="n">time</span> <span class="p">+=</span> <span class="n">delta</span><span class="p">;</span>
+        <span class="n">ReadEvent</span><span class="p">.</span><span class="n">Set</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">void</span> <span class="n">ReadThreadProc</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ReadEvent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;{0} Reading : {1}&#34;</span><span class="p">,</span> <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">usData</span><span class="p">++);</span>
+        <span class="n">WriteEvent</span><span class="p">.</span><span class="n">Set</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>form3.cs</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#">        <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>        <span class="c1">/// 画布清屏
+</span><span class="c1"></span>        <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;sender&#34;&gt;&lt;/param&gt;
+</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;e&#34;&gt;&lt;/param&gt;
+</span><span class="c1"></span>        <span class="k">private</span> <span class="k">void</span> <span class="n">Subform2_button_clear_Click</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Graphics</span> <span class="n">g</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">CreateGraphics</span><span class="p">();</span>
+            <span class="n">g</span><span class="p">.</span><span class="n">Clear</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt;
+</span><span class="c1"></span>        <span class="c1">/// 在画布上绘制波形
+</span><span class="c1"></span>        <span class="c1">/// &lt;/summary&gt;
+</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;sender&#34;&gt;&lt;/param&gt;
+</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;e&#34;&gt;&lt;/param&gt;
+</span><span class="c1"></span>        <span class="c1">/// 
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">Freq</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+        <span class="k">private</span> <span class="k">void</span> <span class="n">Subform_button_draw_Click</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">degree</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
+            <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xo</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">,</span> <span class="n">yo</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
+            <span class="k">const</span> <span class="kt">int</span> <span class="n">points</span> <span class="p">=</span> <span class="m">360</span> <span class="p">*</span> <span class="m">2</span><span class="p">;</span>
+
+            <span class="n">Graphics</span> <span class="n">g</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">CreateGraphics</span><span class="p">();</span>
+            <span class="n">g</span><span class="p">.</span><span class="n">Clear</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
+            <span class="n">Pen</span> <span class="n">pen</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Pen</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>   <span class="c1">//选择画笔颜色、型号、宽度等等
 </span><span class="c1"></span>
-  <span class="cm">/* -1- 接收数据 */</span>
-  <span class="n">HAL_UART_Receive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">pRx_Data</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+            <span class="c1">//绘制坐标轴
+</span><span class="c1"></span>            <span class="n">g</span><span class="p">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">pen</span><span class="p">,</span> <span class="k">new</span> <span class="n">Point</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span><span class="p">),</span> <span class="k">new</span> <span class="n">Point</span><span class="p">(</span><span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Width</span><span class="p">,</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span><span class="p">));</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">points</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+            <span class="p">{</span>
+                <span class="n">degree</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">PI</span> <span class="p">*</span> <span class="m">2</span> <span class="p">*</span> <span class="n">i</span> <span class="p">*</span> <span class="n">Freq</span> <span class="p">/</span> <span class="m">360</span><span class="p">;</span>
+                <span class="n">x</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Width</span> <span class="p">*</span> <span class="n">i</span> <span class="p">/</span> <span class="n">points</span><span class="p">;</span>
+                <span class="n">y</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span> <span class="p">-</span> <span class="n">Math</span><span class="p">.</span><span class="n">Sin</span><span class="p">(</span><span class="n">degree</span><span class="p">)</span> <span class="p">*</span> <span class="p">(</span><span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span> <span class="p">-</span> <span class="m">50</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">degree</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">g</span><span class="p">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">pen</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">xo</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">yo</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">y</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">xo</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
+                <span class="n">yo</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-  <span class="cm">/* -2- 判断数据结尾 */</span>
-  <span class="k">if</span><span class="p">(</span><span class="o">*</span><span class="n">pRx_Data</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span><span class="p">)</span>
-  <span class="p">{</span>
-      <span class="cm">/* -3- 将接收成功的数据通过串口发出去 */</span>
-      <span class="n">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">,</span> <span class="n">uRx_Data</span><span class="p">,</span> <span class="n">uLength</span><span class="p">,</span> <span class="mh">0xffff</span><span class="p">);</span>
-
-      <span class="cm">/* -4- 初始化指针和数据长度 */</span>
-      <span class="n">pRx_Data</span> <span class="o">=</span> <span class="n">uRx_Data</span><span class="p">;</span>   <span class="c1">//重新指向数组起始位置
-</span><span class="c1"></span>      <span class="n">uLength</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>          <span class="c1">//长度清零
-</span><span class="c1"></span>  <span class="p">}</span>
-  <span class="cm">/* -5- 若未结束，指针往下一位移动，长度自增一 */</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-      <span class="n">pRx_Data</span><span class="o">++</span><span class="p">;</span>
-      <span class="n">uLength</span><span class="o">++</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">HAL_UART_IRQHandler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart1</span><span class="p">);</span>
+        <span class="k">private</span> <span class="k">void</span> <span class="n">Subform2_comboBox_fre_SelectedIndexChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">switch</span><span class="p">(</span><span class="n">Subform2_comboBox_fre</span><span class="p">.</span><span class="n">SelectedItem</span><span class="p">.</span><span class="n">ToString</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">case</span> <span class="s">&#34;1kHz&#34;</span><span class="p">:</span>
+                    <span class="n">Freq</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s">&#34;2kHz&#34;</span><span class="p">:</span>
+                    <span class="n">Freq</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s">&#34;3kHz&#34;</span><span class="p">:</span>
+                    <span class="n">Freq</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">default</span><span class="p">:</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>C#窗体程序基础</title>
+			<link>https://hansomxue99.github.io/posts/c_winform/</link>
+			<pubDate>Mon, 26 Apr 2021 20:26:42 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/c_winform/</guid>
+			<description>Form和Form.Designer的关系：Form的构造方法调用了Form.Designer中的InitializeComponent方法
+  读取时间：
+string timeStr = DateTime.Now.ToString(&amp;#34;yyyy-MM-dd HH:mm:ss&amp;#34;); //文本框显示 textBox.Text = timeStr;   两个字段属性的区别：Name和Text。
+  手工布局——&amp;gt;窗口自适应
+//重写父类的方法 protected override void Onlayout(LayoutEventArgs levent) { //1. 调用父类的layout  base.OnLayout(levent); //2. 获取客户区的窗口大小 ClientSize(注意是客户区，不包含标题栏)  int w = this.ClientSize.Width; int h = this.ClientSize.Height; //3. 根据需求，计算每一个控件的大小和位置 } 注意：文本框AutoSize设为false；窗口大小改变时，系统框架会自动调用OnLayout()方法。
+  Anchor和Dock属性不能同时设置
+  textbox
+private void box1_Keypress(object sender, KeypressEventArgs e) { char ch = e.KeyChar; if(ch == &amp;#39;\r&amp;#39;) { string str = box1.</description>
+			<content type="html"><![CDATA[<ol>
+<li>
+<p>Form和Form.Designer的关系：Form的构造方法调用了Form.Designer中的InitializeComponent方法</p>
+</li>
+<li>
+<p>读取时间：</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="kt">string</span> <span class="n">timeStr</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&#34;yyyy-MM-dd HH:mm:ss&#34;</span><span class="p">);</span>
+   
+<span class="c1">//文本框显示
+</span><span class="c1"></span><span class="n">textBox</span><span class="p">.</span><span class="n">Text</span> <span class="p">=</span> <span class="n">timeStr</span><span class="p">;</span>
+</code></pre></div></li>
+<li>
+<p>两个字段属性的区别：Name和Text。</p>
+</li>
+<li>
+<p>手工布局——&gt;窗口自适应</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//重写父类的方法
+</span><span class="c1"></span><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="n">Onlayout</span><span class="p">(</span><span class="n">LayoutEventArgs</span> <span class="n">levent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//1. 调用父类的layout
+</span><span class="c1"></span>    <span class="k">base</span><span class="p">.</span><span class="n">OnLayout</span><span class="p">(</span><span class="n">levent</span><span class="p">);</span>
+       
+    <span class="c1">//2. 获取客户区的窗口大小 ClientSize(注意是客户区，不包含标题栏)
+</span><span class="c1"></span> <span class="kt">int</span> <span class="n">w</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">ClientSize</span><span class="p">.</span><span class="n">Width</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">h</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">ClientSize</span><span class="p">.</span><span class="n">Height</span><span class="p">;</span>
+       
+    <span class="c1">//3. 根据需求，计算每一个控件的大小和位置
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>注意：文本框AutoSize设为false；窗口大小改变时，系统框架会自动调用OnLayout()方法。</p>
+</li>
+<li>
+<p>Anchor和Dock属性不能同时设置</p>
+</li>
+<li>
+<p>textbox</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="k">void</span> <span class="n">box1_Keypress</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">KeypressEventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">ch</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">KeyChar</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ch</span> <span class="p">==</span> <span class="sc">&#39;\r&#39;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">str</span> <span class="p">=</span> <span class="n">box1</span><span class="p">.</span><span class="n">Text</span><span class="p">;</span>
+        <span class="n">MessageBox</span><span class="p">.</span><span class="n">Show</span><span class="p">(</span><span class="s">&#34;用户输入了：&#34;</span> <span class="p">+</span> <span class="n">str</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><h2 id="参考资料">参考资料</h2>
-<p>[1] <a href="https://www.cnblogs.com/ChurF-Lin/p/10809000.html">基于STM32之UART串口通信协议（三）接收</a></p>
-<p>[2] <a href="https://www.bilibili.com/video/BV1f7411G7qc?t=217">UART串口通信协议原理</a></p>
+</code></pre></div></li>
+<li>
+<p>checkBox复选框</p>
+<p>check属性：是否勾选</p>
+<p>Text属性：文本显示</p>
+<p>事件：Click用户点击</p>
+<p>​            CheckChanged用户点击或程序改变</p>
+</li>
+<li>
+<p>下拉框</p>
+<p>添加下拉选项：自动添加（Items列表）和代码添加 <code>combox1.Items.Add(&quot;&quot;);</code></p>
+<p>获取选中值或索引：</p>
+<p>​	SlectedItem</p>
+<p>​	SlectedIndex：未选中-1</p>
+<p>用户选中事件</p>
+<p>​	SlectedIndexChanged</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">combox1_SelectedIndexChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;现在选中的是：&#34;</span> <span class="p">+</span> <span class="n">combox1</span><span class="p">.</span><span class="n">SelectedItem</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></li>
+<li>
+<p>列表框ListBox</p>
+<p>SelectionMode ：单选或多选模式</p>
+<p>SelectedIndexChanged：选择改变事件</p>
+</li>
+<li>
+<p>ToString方法的重写</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">ToString</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="s">&#34;{0} {1}&#34;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></li>
+</ol>
+]]></content>
+		</item>
+		
+		<item>
+			<title>C#面向对象</title>
+			<link>https://hansomxue99.github.io/posts/c_class/</link>
+			<pubDate>Mon, 26 Apr 2021 20:23:44 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/c_class/</guid>
+			<description>C#面向对象 1. 新建类和创建对象 //新建类 public class Point{ public int x,y;	//成员变量  public Piont(int x, int y){	//构造函数：函数名与类名一致，用于给对象初始化  this.x = x; this.y = y; } } //创建对象 Point p1 = new Piont(10,10);	//new关键字新建对象 2. 创建子类 //创建Piont的子类Point3D public class Point3D: Point{ public int z;	//子类对象会继承父类的public类型的成员 	public Point3D(int x, int y, int z){ //省略Point(x,y);这是因为在创建子类时，父类已经初始化，不必重复声明 	this.z = z;	//只需执行z的初始化 	} } //创建Point3D对象 //第一种方法 Point3D p2 = new Point3D(10,20,30); //第二种方法 Point p2 = new Point3D(10,20,30); 3.</description>
+			<content type="html"><![CDATA[<h2 id="c面向对象">C#面向对象</h2>
+<h3 id="1-新建类和创建对象">1. 新建类和创建对象</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//新建类
+</span><span class="c1"></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Point</span><span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>		<span class="c1">//成员变量
+</span><span class="c1"></span>    
+    <span class="k">public</span> <span class="n">Piont</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>		<span class="c1">//构造函数：函数名与类名一致，用于给对象初始化
+</span><span class="c1"></span>        <span class="k">this</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建对象
+</span><span class="c1"></span><span class="n">Point</span> <span class="n">p1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Piont</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">10</span><span class="p">);</span>	<span class="c1">//new关键字新建对象
+</span></code></pre></div><h3 id="2-创建子类">2. 创建子类</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建Piont的子类Point3D
+</span><span class="c1"></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Point3D</span><span class="p">:</span> <span class="n">Point</span><span class="p">{</span>
+	<span class="k">public</span> <span class="kt">int</span> <span class="n">z</span><span class="p">;</span>	<span class="c1">//子类对象会继承父类的public类型的成员
+</span><span class="c1"></span>	<span class="k">public</span> <span class="n">Point3D</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">z</span><span class="p">){</span>
+		<span class="c1">//省略Point(x,y);这是因为在创建子类时，父类已经初始化，不必重复声明
+</span><span class="c1"></span>		<span class="k">this</span><span class="p">.</span><span class="n">z</span> <span class="p">=</span> <span class="n">z</span><span class="p">;</span>		<span class="c1">//只需执行z的初始化
+</span><span class="c1"></span>	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建Point3D对象
+</span><span class="c1">//第一种方法
+</span><span class="c1"></span><span class="n">Point3D</span> <span class="n">p2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Point3D</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">20</span><span class="p">,</span><span class="m">30</span><span class="p">);</span>
+<span class="c1">//第二种方法
+</span><span class="c1"></span><span class="n">Point</span> <span class="n">p2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Point3D</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">20</span><span class="p">,</span><span class="m">30</span><span class="p">);</span>
+</code></pre></div><h3 id="3-类的封装性与可访问性">3. 类的封装性与可访问性</h3>
+<p>这里主要介绍两种访问关键字public和private。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">可访问性</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">public</td>
+<td style="text-align:left">修饰的成员变量和方法不受限</td>
+</tr>
+<tr>
+<td style="text-align:left">private</td>
+<td style="text-align:left">修饰的成员变量和方法只能在该类中访问，此类之外的方法不能对其访问。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-static关键字">4. static关键字</h3>
+<p>顾名思义，static关键字创建的是静态成员变量或者方法。何为静态？静态即是在内存中划出一块固定的存储空间供数据进行使用。</p>
+<p>因此，对于静态方法来说，使用静态方法不必创建(new)一个新的对象，而可以直接通过类名对静态方法进行调用。</p>
+<h3 id="5-参数修饰符">5. 参数修饰符</h3>
+<ol>
+<li>
+<p>ref（引用）修饰符</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//交换两数
+</span><span class="c1"></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+   
+<span class="k">class</span> <span class="nc">Test</span><span class="p">{</span>
+    <span class="k">static</span> <span class="k">void</span> <span class="n">Swap</span><span class="p">(</span><span class="k">ref</span> <span class="n">x</span><span class="p">,</span> <span class="k">ref</span> <span class="n">y</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">x</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">y</span> <span class="p">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+       
+    <span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(){</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">j</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+        <span class="n">Swap</span><span class="p">(</span><span class="k">ref</span> <span class="n">i</span><span class="p">,</span> <span class="k">ref</span> <span class="n">j</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">Writeline</span><span class="p">(</span><span class="s">&#34;{0} {1}&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>		<span class="c1">//output: &#34;2 1&#34;
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></li>
+<li>
+<p>out（输出）修饰符</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+   
+<span class="k">class</span> <span class="nc">Test</span><span class="p">{</span>
+    <span class="k">static</span> <span class="k">void</span> <span class="n">Divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">result</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">remainder</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">result</span> <span class="p">=</span> <span class="n">x</span> <span class="p">/</span> <span class="n">y</span><span class="p">;</span>
+         <span class="n">remainder</span> <span class="p">=</span> <span class="n">x</span> <span class="p">%</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+   
+    <span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">()</span> <span class="p">{</span>
+         <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">rem</span><span class="p">;</span>
+         <span class="n">Divide</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="k">out</span> <span class="n">res</span><span class="p">,</span> <span class="k">out</span> <span class="n">rem</span><span class="p">);</span>
+         <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;{0} {1}&#34;</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">rem</span><span class="p">);</span>   <span class="c1">// Outputs &#34;3 1&#34;
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></li>
+</ol>
 ]]></content>
 		</item>
 		
