@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DX on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/dx/</link>
+    <description>Recent content in DX on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:25:54 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/dx/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DX录音——写入.wav文件</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</link>
+      <pubDate>Tue, 11 May 2021 18:25:54 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</guid>
+      <description>//private string strRecSaveFile = string.Empty;//文件保存路径 //private FileStream fsWav = null;//保存的文件流 //private BinaryWriter mWriter; private void CreateWaveFile(string strFileName) { fsWav = new FileStream(strFileName, FileMode.CreateNew); mWriter = new BinaryWriter(fsWav); /************************************************************************** Here is where the file will be created. A wave file is a RIFF file, which has chunks of data that describe what the file contains. A wave RIFF file is put together like this: The 12 byte RIFF chunk is constructed like this: Bytes 0 - 3 : &amp;#39;R&amp;#39; &amp;#39;I&amp;#39; &amp;#39;F&amp;#39; &amp;#39;F&amp;#39; Bytes 4 - 7 : Length of file, minus the first 8 bytes of the RIFF description.</description>
+    </item>
+    
+    <item>
+      <title>DX录音——通知创建</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/notify/</link>
+      <pubDate>Tue, 11 May 2021 18:24:55 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/notify/</guid>
+      <description>//下面方法中的notifyevent是定义的全局变量private AutoResetEvent notifyevent = null; //下面方法中的notifythread是定义的全局变量private Thread notifythread = null; //下面方法中的myNotify是定义的全局变量private Notify myNotify = null;//缓冲区提示事件 //设置通知 private void CreateNotification() { BufferPositionNotify[] bpn = new BufferPositionNotify[iNotifyNum];	//设置缓冲区通知个数  //设置通知事件  notifyevent = new AutoResetEvent(false); notifythread = new Thread(RecoData);	//开启线程  notifythread.Start(); for (int i = 0; i &amp;lt; iNotifyNum; i++) { bpn[i].Offset = iNotifySize + i * iNotifySize-1;//设置具体每个的位置  bpn[i].EventNotifyHandle = notifyevent.Handle; } myNotify = new Notify(capturebuffer); myNotify.SetNotificationPositions(bpn); } //线程中的事件 private void RecoData() { while (true) { // 等待缓冲区的通知消息  //notifyevent.</description>
+    </item>
+    
+    <item>
+      <title>DX录音——缓冲区创建</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/buffer/</link>
+      <pubDate>Tue, 11 May 2021 18:24:06 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/buffer/</guid>
+      <description>//下面方法中的capture是定义的全局变量private Capture capture = null; //获取PC音频设备 private bool CreateCaputerDevice() { //首先要枚举可用的捕捉设备  CaptureDevicesCollection capturedev = new CaptureDevicesCollection(); Guid devguid; if (capturedev.Count &amp;gt; 0) { devguid = capturedev[0].DriverGuid; } else { MessageBox.Show(&amp;#34;当前没有可用于音频捕捉的设备&amp;#34;, &amp;#34;系统提示&amp;#34;); return false; } //利用设备GUID来建立一个捕捉设备对象  capture = new Capture(devguid); return true; } //下面方法中的mWavFormat是定义的全局变量private WaveFormat mWavFormat; //下面方法中的iNotifySize是定义的全局变量private int iNotifySize; //下面方法中的iNotifyNum是定义的全局变量private int iNotifyNum = 16; //下面方法中的iBufferSize是定义的全局变量private int iBufferSize; //下面方法中的capturebuffer是定义的全局变量private CaptureBuffer capturebuffer = null; //获取缓冲区 private void CreateCaptureBuffer() { //想要创建一个捕捉缓冲区必须要两个参数：缓冲区信息（描述这个缓冲区中的格式等），缓冲设备。  CaptureBufferDescription bufferdescription = new CaptureBufferDescription(); bufferdescription.</description>
+    </item>
+    
+    <item>
+      <title>DX录音——音频格式设置</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</link>
+      <pubDate>Tue, 11 May 2021 18:23:00 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</guid>
+      <description>public struct WaveFormat { //采样位数16  public short BitsPerSample { get; set; } //The value of the BlockAlign property must be equal to the product of Channels and BitsPerSample divided by 8 (bits per byte).  public short BlockAlign { get; set; } //The AverageBytesPerSecond property should be a product of BlockAlign and SamplesPerSecond  public int AverageBytesPerSecond { get; set; } //采样率：11025、22050、44100Hz  public int SamplesPerSecond { get; set; } //1单声道，2立体声  public short Channels { get; set; } //音频类型WaveFormatTag.</description>
+    </item>
+    
+  </channel>
+</rss>

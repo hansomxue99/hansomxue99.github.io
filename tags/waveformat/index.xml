@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>WaveFormat on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/waveformat/</link>
+    <description>Recent content in WaveFormat on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:23:00 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/waveformat/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DX录音——音频格式设置</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</link>
+      <pubDate>Tue, 11 May 2021 18:23:00 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</guid>
+      <description>public struct WaveFormat { //采样位数16  public short BitsPerSample { get; set; } //The value of the BlockAlign property must be equal to the product of Channels and BitsPerSample divided by 8 (bits per byte).  public short BlockAlign { get; set; } //The AverageBytesPerSecond property should be a product of BlockAlign and SamplesPerSecond  public int AverageBytesPerSecond { get; set; } //采样率：11025、22050、44100Hz  public int SamplesPerSecond { get; set; } //1单声道，2立体声  public short Channels { get; set; } //音频类型WaveFormatTag.</description>
+    </item>
+    
+  </channel>
+</rss>

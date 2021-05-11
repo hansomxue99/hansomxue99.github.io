@@ -6,200 +6,267 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>zh-CN</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Mon, 26 Apr 2021 20:28:28 +0800</lastBuildDate>
+		<lastBuildDate>Tue, 11 May 2021 18:25:54 +0800</lastBuildDate>
 		<atom:link href="https://hansomxue99.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
-			<title>C#声音捕获基础</title>
-			<link>https://hansomxue99.github.io/posts/c_capturesound/</link>
-			<pubDate>Mon, 26 Apr 2021 20:28:28 +0800</pubDate>
+			<title>DX录音——写入.wav文件</title>
+			<link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</link>
+			<pubDate>Tue, 11 May 2021 18:25:54 +0800</pubDate>
 			
-			<guid>https://hansomxue99.github.io/posts/c_capturesound/</guid>
-			<description>using Microsoft.DirectX.DirectSound;
-  Capture;	//音频捕捉设备 CaptureBuffer;	//缓冲区对象 WaveFormat;	//录音格式   设置录音参数
-private WaveFormat mWaveFormat; private WaveFormat CreateWaveFormat() { WaveFormat waveformat = new WaveFormat(); waveformat.FormatTag = WaveFormatTag.Pcm;	//音频类型设为PCM  waveformat.SamplesPerSecond = 11025;	//采样率典型值：11025、22050、44100Hz(为了简化程序，暂且设为定值)  waveformat.BitsPerSample = 16;	//采样位数  waveformat.Channels = 2;	//声道：1单声道，2立体声  waveformat.BlockAlign = (short)(waveformat.Channels * (waveformat.BitsPerSample / 8));//单位采样点的字节数  waveformat.AverageBytesPerSecond = waveformat.BlockAlign * waveformat.SamplesPerSecond; return waveformat; // 按照以上采样规格，可知采样1秒钟的字节数为 11025*2=32000B 约为22K } //mWaveFormat = CreateWaveFormat();   初始化录音设备</description>
-			<content type="html"><![CDATA[<ol>
-<li>
-<p><code>using Microsoft.DirectX.DirectSound;</code></p>
-</li>
-<li>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="n">Capture</span><span class="p">;</span>		<span class="c1">//音频捕捉设备
-</span><span class="c1"></span><span class="n">CaptureBuffer</span><span class="p">;</span>	<span class="c1">//缓冲区对象
-</span><span class="c1"></span><span class="n">WaveFormat</span><span class="p">;</span>		<span class="c1">//录音格式
-</span></code></pre></div></li>
-<li>
-<p>设置录音参数</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">mWaveFormat</span><span class="p">;</span>
-   
-<span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">CreateWaveFormat</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">WaveFormat</span> <span class="n">waveformat</span> <span class="p">=</span> <span class="k">new</span> <span class="n">WaveFormat</span><span class="p">();</span>
-    <span class="n">waveformat</span><span class="p">.</span><span class="n">FormatTag</span> <span class="p">=</span> <span class="n">WaveFormatTag</span><span class="p">.</span><span class="n">Pcm</span><span class="p">;</span>	<span class="c1">//音频类型设为PCM
-</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">SamplesPerSecond</span> <span class="p">=</span> <span class="m">11025</span><span class="p">;</span>		<span class="c1">//采样率典型值：11025、22050、44100Hz(为了简化程序，暂且设为定值)
-</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">=</span> <span class="m">16</span><span class="p">;</span>				<span class="c1">//采样位数  
-</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">Channels</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>					<span class="c1">//声道：1单声道，2立体声  
-</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">BlockAlign</span> <span class="p">=</span> <span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">waveformat</span><span class="p">.</span><span class="n">Channels</span> <span class="p">*</span> <span class="p">(</span><span class="n">waveformat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">/</span> <span class="m">8</span><span class="p">));</span><span class="c1">//单位采样点的字节数  
-</span><span class="c1"></span>    <span class="n">waveformat</span><span class="p">.</span><span class="n">AverageBytesPerSecond</span> <span class="p">=</span> <span class="n">waveformat</span><span class="p">.</span><span class="n">BlockAlign</span> <span class="p">*</span> <span class="n">waveformat</span><span class="p">.</span><span class="n">SamplesPerSecond</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">waveformat</span><span class="p">;</span>
-    <span class="c1">// 按照以上采样规格，可知采样1秒钟的字节数为 11025*2=32000B 约为22K
-</span><span class="c1"></span><span class="p">}</span>
-   
-<span class="c1">//mWaveFormat = CreateWaveFormat();
-</span></code></pre></div></li>
-<li>
-<p>初始化录音设备</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">Capture</span> <span class="n">mCapDev</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//音频捕捉设备初始设为NULL
-</span><span class="c1"></span>   
-<span class="k">private</span> <span class="kt">bool</span> <span class="n">CreateCaptureDevice</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="c1">//枚举可用的录音设备  
-</span><span class="c1"></span>    <span class="n">CaptureDevicesCollection</span> <span class="n">capturedev</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureDevicesCollection</span><span class="p">();</span>
-    <span class="n">Guid</span> <span class="n">devguid</span> <span class="p">=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">capturedev</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-     <span class="n">devguid</span> <span class="p">=</span> <span class="n">capturedev</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">DriverGuid</span><span class="p">;</span> 	<span class="c1">//0选择默认录音设备
-</span><span class="c1"></span>    <span class="k">else</span>
-     <span class="c1">//MessageBox.Show(&#34;当前没有可用于音频捕捉的设备&#34;, &#34;系统提示&#34;);
-</span><span class="c1"></span>     <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-   
-    <span class="c1">//利用设备GUID来建立一个捕捉设备对象  
-</span><span class="c1"></span>    <span class="n">mCapDev</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Capture</span><span class="p">(</span><span class="n">devguid</span><span class="p">);</span>
-    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-<span class="p">}</span>
-   
-<span class="c1">//CreateCaptureDevice();
-</span></code></pre></div></li>
-<li>
-<p>创建录音缓存区</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">CaptureBuffer</span> <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span><span class="c1">//录音缓冲区 
-</span><span class="c1"></span><span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">mWaveFormat</span><span class="p">;</span>
-   
-<span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifyNum</span> <span class="p">;</span>		<span class="c1">//通知的个数  
-</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifySize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>	<span class="c1">//通知所在区域大小 
-</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iBufferSize</span><span class="p">;</span>
-   
-<span class="k">private</span> <span class="k">void</span> <span class="n">CreateCaptureBuffer</span><span class="p">(</span> <span class="kt">int</span> <span class="n">bufferNum</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bufferSizeSeconds</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">iNotifyNum</span> <span class="p">=</span> <span class="n">bufferNum</span><span class="p">;</span>
-    <span class="c1">//缓冲区的描述对象
-</span><span class="c1"></span>    <span class="n">CaptureBufferDescription</span> <span class="n">bufferDesc</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureBufferDescription</span><span class="p">();</span>
-    <span class="n">bufferDesc</span><span class="p">.</span><span class="n">Format</span> <span class="p">=</span> <span class="n">mWaveFormat</span><span class="p">;</span>			<span class="c1">//1. 设置录音数据格式  
-</span><span class="c1"></span>    <span class="n">iNotifySize</span> <span class="p">=(</span><span class="kt">int</span><span class="p">)(</span> <span class="n">mWaveFormat</span><span class="p">.</span><span class="n">SamplesPerSecond</span> <span class="p">*</span> <span class="n">bufferSizeSeconds</span><span class="p">*</span> <span class="n">mWaveFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">);</span>
-    <span class="n">iBufferSize</span> <span class="p">=</span> <span class="n">iNotifyNum</span> <span class="p">*</span> <span class="n">iNotifySize</span><span class="p">;</span>
-    <span class="n">bufferDesc</span><span class="p">.</span><span class="n">BufferBytes</span> <span class="p">=</span> <span class="n">iBufferSize</span><span class="p">;</span>	<span class="c1">//2. 设置录音缓存大小
-</span><span class="c1"></span>    <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureBuffer</span><span class="p">(</span><span class="n">bufferDesc</span><span class="p">,</span> <span class="n">mCapDev</span><span class="p">);</span>	<span class="c1">//3. 创建录音缓冲区  
-</span><span class="c1"></span><span class="p">}</span>
-   
-<span class="c1">//CreateCaptureBffer(bufferNum, bufferSizeSeconds);
-</span></code></pre></div></li>
-<li>
-<p>创建缓存区录制通知</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">Notify</span> <span class="n">captureNotify</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>			<span class="c1">//缓冲区录制通知
-</span><span class="c1"></span><span class="k">private</span> <span class="n">AutoResetEvent</span> <span class="n">notifyevent</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//通知事件
-</span><span class="c1"></span>   
-<span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifyNum</span> <span class="p">;</span>		<span class="c1">//通知的个数  
-</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iNotifySize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>	<span class="c1">//通知所在区域大小 
-</span><span class="c1"></span>   
-<span class="k">private</span> <span class="k">void</span> <span class="n">CreateNotification</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">BufferPositionNotify</span><span class="p">[]</span> <span class="n">bpn</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BufferPositionNotify</span><span class="p">[</span><span class="n">iNotifyNum</span><span class="p">];</span>		<span class="c1">//缓存位置通知点数组  
-</span><span class="c1"></span>    <span class="n">notifyevent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span> 	<span class="c1">//同步事件对象，初始化
-</span><span class="c1"></span>   
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">iNotifyNum</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-        <span class="n">bpn</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Offset</span> <span class="p">=</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">iNotifySize</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span><span class="c1">//设置缓冲区位置，到达该位置发出通知  
-</span><span class="c1"></span>        <span class="n">bpn</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">EventNotifyHandle</span> <span class="p">=</span> <span class="n">notifyevent</span><span class="p">.</span><span class="n">Handle</span><span class="p">;</span><span class="c1">//设置通知事件，该事件发出通知
-</span><span class="c1"></span>    <span class="p">}</span>
-    <span class="n">captureNotify</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Notify</span><span class="p">(</span><span class="n">captureBuffer</span><span class="p">);</span> <span class="c1">//1. 创建captureBuffer录音缓存的通知
-</span><span class="c1"></span>    <span class="n">captureNotify</span><span class="p">.</span><span class="n">SetNotificationPositions</span><span class="p">(</span><span class="n">bpn</span><span class="p">);</span> <span class="c1">//2. 设置多个通知点
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div></li>
-<li>
-<p>以上工作都是前期准备，对录音设备的初始化，以下功能由用户自定义。</p>
-<p>（1）设备初始化</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="kt">bool</span> <span class="n">InitReciever</span><span class="p">(</span><span class="kt">int</span> <span class="n">bufferNums</span><span class="p">,</span> <span class="kt">double</span> <span class="n">bufferSeconds</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">CreateWaveFormat</span><span class="p">();</span>		<span class="c1">//1.
-</span><span class="c1"></span> <span class="kt">bool</span> <span class="n">jud</span> <span class="p">=</span> <span class="n">CreateCaptureDevice</span><span class="p">();</span>	<span class="c1">//2.
-</span><span class="c1"></span>    <span class="k">if</span><span class="p">(!</span><span class="n">jud</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">jud</span><span class="p">;</span>
-    <span class="n">CreateCaptureBuffer</span><span class="p">(</span><span class="n">bufferNums</span><span class="p">,</span> <span class="n">bufferSeconds</span><span class="p">);</span>
-    <span class="n">CreateNotification</span><span class="p">();</span>
-    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>（2）设备开始录制和停止</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">Thread</span> <span class="n">notifythread</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//新建一个线程
-</span><span class="c1"></span><span class="k">private</span> <span class="n">CaptureBuffer</span> <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span><span class="c1">//录音缓冲区 
-</span><span class="c1"></span>   
-<span class="k">public</span> <span class="k">void</span> <span class="n">recStart</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">notifythread</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="n">notifythread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
-    <span class="n">notifythread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="n">RecordData</span><span class="p">);</span> 		<span class="c1">//录音线程
-</span><span class="c1"></span>   
-    <span class="n">captureBuffer</span><span class="p">.</span><span class="n">Start</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>            
-    <span class="n">notifythread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>            
-<span class="p">}</span>
-   
-<span class="k">public</span> <span class="k">void</span> <span class="n">recStop</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">notifythread</span> <span class="p">!=</span><span class="k">null</span> <span class="p">)</span>
-        <span class="n">notifythread</span><span class="p">.</span><span class="n">Abort</span><span class="p">();</span>
-    <span class="n">captureBuffer</span><span class="p">.</span><span class="n">Stop</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div></li>
-<li>
-<p>录音涉及双线程 <code>notifythread = new Thread(RecordData);</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="k">void</span> <span class="n">RecordData</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// 等待缓冲区的通知消息  
-</span><span class="c1"></span>        <span class="n">notifyevent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">();</span>
-        <span class="c1">// 录制数据  
-</span><span class="c1"></span>        <span class="n">RecordCapturedData</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>这里再次封装了一个数据记录函数</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">CaptureBuffer</span> <span class="n">captureBuffer</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span><span class="c1">//录音缓冲区 
-</span><span class="c1"></span><span class="k">private</span> <span class="kt">int</span> <span class="n">iLastPos</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span><span class="c1">//上一次读取数据位置 
-</span><span class="c1"></span>   
-<span class="k">private</span> <span class="k">void</span> <span class="n">RecordCapturedData</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">byte</span><span class="p">[]</span> <span class="n">capturedata</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>		<span class="c1">//字节数组存储捕获的数据
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">readpos</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">capturepos</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">locksize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-   
-    <span class="c1">//获取录制数据位置
-</span><span class="c1"></span>    <span class="n">captureBuffer</span><span class="p">.</span><span class="n">GetCurrentPosition</span><span class="p">(</span><span class="k">out</span> <span class="n">capturepos</span><span class="p">,</span> <span class="k">out</span> <span class="n">readpos</span><span class="p">);</span>
-    <span class="n">locksize</span> <span class="p">=</span> <span class="n">readpos</span> <span class="p">-</span> <span class="n">iLastPos</span><span class="p">;</span><span class="c1">//可以安全读取的数据大小  
-</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">locksize</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">locksize</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
-        <span class="n">locksize</span> <span class="p">+=</span> <span class="n">iBufferSize</span><span class="p">;</span><span class="c1">//循环缓冲区，指针绕回
-</span><span class="c1"></span>    <span class="c1">//读取录制好的数据
-</span><span class="c1"></span>    <span class="n">capturedata</span> <span class="p">=</span> <span class="p">(</span><span class="kt">byte</span><span class="p">[])</span><span class="n">captureBuffer</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">iLastPos</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="kt">byte</span><span class="p">),</span> <span class="n">LockFlag</span><span class="p">.</span><span class="n">FromWriteCursor</span><span class="p">,</span> <span class="n">locksize</span><span class="p">);</span>
-    <span class="c1">//处理接收到的数据
-</span><span class="c1"></span>    <span class="n">process</span><span class="p">?.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">capturedata</span><span class="p">);</span>
-   
-    <span class="n">iLastPos</span> <span class="p">+=</span> <span class="n">capturedata</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
-    <span class="n">iLastPos</span> <span class="p">%=</span> <span class="n">iBufferSize</span><span class="p">;</span><span class="c1">//取模是因为缓冲区是循环的。  
-</span><span class="c1"></span>    <span class="n">iSampleSize</span> <span class="p">+=</span> <span class="n">capturedata</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></li>
-<li>
-<p>值得一提的是，这里自定义了一个回调函数</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="n">OnRecieveData</span><span class="p">(</span><span class="kt">byte</span><span class="p">[]</span> <span class="n">model</span><span class="p">);</span> <span class="c1">//回调函数原型定义
-</span><span class="c1"></span>   
-<span class="k">public</span> <span class="n">OnRecieveData</span> <span class="n">process</span><span class="p">;</span><span class="c1">//接收数据处理代理：提供回调函数。收到数据时被调用
-</span></code></pre></div></li>
-</ol>
-]]></content>
+			<guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</guid>
+			<description>//private string strRecSaveFile = string.Empty;//文件保存路径 //private FileStream fsWav = null;//保存的文件流 //private BinaryWriter mWriter; private void CreateWaveFile(string strFileName) { fsWav = new FileStream(strFileName, FileMode.CreateNew); mWriter = new BinaryWriter(fsWav); /************************************************************************** Here is where the file will be created. A wave file is a RIFF file, which has chunks of data that describe what the file contains. A wave RIFF file is put together like this: The 12 byte RIFF chunk is constructed like this: Bytes 0 - 3 : &amp;#39;R&amp;#39; &amp;#39;I&amp;#39; &amp;#39;F&amp;#39; &amp;#39;F&amp;#39; Bytes 4 - 7 : Length of file, minus the first 8 bytes of the RIFF description.</description>
+			<content type="html"><![CDATA[<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//private string strRecSaveFile = string.Empty;//文件保存路径
+</span><span class="c1">//private FileStream fsWav = null;//保存的文件流
+</span><span class="c1">//private BinaryWriter mWriter;
+</span><span class="c1"></span><span class="k">private</span> <span class="k">void</span> <span class="n">CreateWaveFile</span><span class="p">(</span><span class="kt">string</span> <span class="n">strFileName</span><span class="p">)</span>
+ <span class="p">{</span>
+     <span class="n">fsWav</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">strFileName</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">CreateNew</span><span class="p">);</span>
+     <span class="n">mWriter</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BinaryWriter</span><span class="p">(</span><span class="n">fsWav</span><span class="p">);</span>
+     <span class="cm">/**************************************************************************
+</span><span class="cm">               Here is where the file will be created. A
+</span><span class="cm">               wave file is a RIFF file, which has chunks
+</span><span class="cm">               of data that describe what the file contains.
+</span><span class="cm">               A wave RIFF file is put together like this:
+</span><span class="cm">               The 12 byte RIFF chunk is constructed like this:
+</span><span class="cm">               Bytes 0 - 3 :  &#39;R&#39; &#39;I&#39; &#39;F&#39; &#39;F&#39;
+</span><span class="cm">               Bytes 4 - 7 :  Length of file, minus the first 8 bytes of the RIFF description.
+</span><span class="cm">                                 (4 bytes for &#34;WAVE&#34; + 24 bytes for format chunk length +
+</span><span class="cm">                                 8 bytes for data chunk description + actual sample data size.)
+</span><span class="cm">                Bytes 8 - 11: &#39;W&#39; &#39;A&#39; &#39;V&#39; &#39;E&#39;
+</span><span class="cm">                The 24 byte FORMAT chunk is constructed like this:
+</span><span class="cm">                Bytes 0 - 3 : &#39;f&#39; &#39;m&#39; &#39;t&#39; &#39; &#39;
+</span><span class="cm">                Bytes 4 - 7 : The format chunk length. This is always 16.
+</span><span class="cm">                Bytes 8 - 9 : File padding. Always 1.
+</span><span class="cm">                Bytes 10- 11: Number of channels. Either 1 for mono,  or 2 for stereo.
+</span><span class="cm">                Bytes 12- 15: Sample rate.
+</span><span class="cm">                Bytes 16- 19: Number of bytes per second.
+</span><span class="cm">                Bytes 20- 21: Bytes per sample. 1 for 8 bit mono, 2 for 8 bit stereo or
+</span><span class="cm">                                16 bit mono, 4 for 16 bit stereo.
+</span><span class="cm">                Bytes 22- 23: Number of bits per sample.
+</span><span class="cm">                The DATA chunk is constructed like this:
+</span><span class="cm">                Bytes 0 - 3 : &#39;d&#39; &#39;a&#39; &#39;t&#39; &#39;a&#39;
+</span><span class="cm">                Bytes 4 - 7 : Length of data, in bytes.
+</span><span class="cm">                Bytes 8 -: Actual sample data.
+</span><span class="cm">              ***************************************************************************/</span>
+     <span class="kt">char</span><span class="p">[]</span> <span class="n">ChunkRiff</span> <span class="p">=</span> <span class="p">{</span> <span class="sc">&#39;R&#39;</span><span class="p">,</span> <span class="sc">&#39;I&#39;</span><span class="p">,</span> <span class="sc">&#39;F&#39;</span><span class="p">,</span> <span class="sc">&#39;F&#39;</span> <span class="p">};</span>
+     <span class="kt">char</span><span class="p">[]</span> <span class="n">ChunkType</span> <span class="p">=</span> <span class="p">{</span> <span class="sc">&#39;W&#39;</span><span class="p">,</span> <span class="sc">&#39;A&#39;</span><span class="p">,</span> <span class="sc">&#39;V&#39;</span><span class="p">,</span> <span class="sc">&#39;E&#39;</span> <span class="p">};</span>
+     <span class="kt">char</span><span class="p">[]</span> <span class="n">ChunkFmt</span> <span class="p">=</span> <span class="p">{</span> <span class="sc">&#39;f&#39;</span><span class="p">,</span> <span class="sc">&#39;m&#39;</span><span class="p">,</span> <span class="sc">&#39;t&#39;</span><span class="p">,</span> <span class="sc">&#39; &#39;</span> <span class="p">};</span>
+     <span class="kt">char</span><span class="p">[]</span> <span class="n">ChunkData</span> <span class="p">=</span> <span class="p">{</span> <span class="sc">&#39;d&#39;</span><span class="p">,</span> <span class="sc">&#39;a&#39;</span><span class="p">,</span> <span class="sc">&#39;t&#39;</span><span class="p">,</span> <span class="sc">&#39;a&#39;</span> <span class="p">};</span>
+     <span class="kt">short</span> <span class="n">shPad</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>                <span class="c1">// File padding
+</span><span class="c1"></span>     <span class="kt">int</span> <span class="n">nFormatChunkLength</span> <span class="p">=</span> <span class="m">0</span><span class="n">x10</span><span class="p">;</span>  <span class="c1">// Format chunk length.
+</span><span class="c1"></span>     <span class="kt">int</span> <span class="n">nLength</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>                <span class="c1">// File length, minus first 8 bytes of RIFF description. This will be filled in later.
+</span><span class="c1"></span>     <span class="kt">short</span> <span class="n">shBytesPerSample</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>     <span class="c1">// Bytes per sample.
+</span><span class="c1"></span>     <span class="c1">// 一个样本点的字节数目
+</span><span class="c1"></span>     <span class="k">if</span> <span class="p">(</span><span class="m">8</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">&amp;&amp;</span> <span class="m">1</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">)</span>
+         <span class="n">shBytesPerSample</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+     <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="m">8</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">&amp;&amp;</span> <span class="m">2</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">)</span> <span class="p">||</span> <span class="p">(</span><span class="m">16</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">&amp;&amp;</span> <span class="m">1</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">))</span>
+         <span class="n">shBytesPerSample</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+     <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="m">16</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">&amp;&amp;</span> <span class="m">2</span> <span class="p">==</span> <span class="n">mWavFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">)</span>
+         <span class="n">shBytesPerSample</span> <span class="p">=</span> <span class="m">4</span><span class="p">;</span>
+     <span class="c1">// RIFF 块
+</span><span class="c1"></span>     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">ChunkRiff</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">nLength</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">ChunkType</span><span class="p">);</span>
+     <span class="c1">// WAVE块
+</span><span class="c1"></span>     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">ChunkFmt</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">nFormatChunkLength</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">shPad</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">mWavFormat</span><span class="p">.</span><span class="n">Channels</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">mWavFormat</span><span class="p">.</span><span class="n">SamplesPerSecond</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">mWavFormat</span><span class="p">.</span><span class="n">AverageBytesPerSecond</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">shBytesPerSample</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">mWavFormat</span><span class="p">.</span><span class="n">BitsPerSample</span><span class="p">);</span>
+     <span class="c1">// 数据块
+</span><span class="c1"></span>     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">ChunkData</span><span class="p">);</span>
+     <span class="n">mWriter</span><span class="p">.</span><span class="n">Write</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="m">0</span><span class="p">);</span>   <span class="c1">// The sample length will be written in later.
+</span><span class="c1"></span> <span class="p">}</span>
+</code></pre></div>]]></content>
 		</item>
 		
 		<item>
-			<title>C#多线程</title>
-			<link>https://hansomxue99.github.io/posts/c_multithread/</link>
-			<pubDate>Mon, 26 Apr 2021 20:27:32 +0800</pubDate>
+			<title>DX录音——通知创建</title>
+			<link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/notify/</link>
+			<pubDate>Tue, 11 May 2021 18:24:55 +0800</pubDate>
 			
-			<guid>https://hansomxue99.github.io/posts/c_multithread/</guid>
+			<guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/notify/</guid>
+			<description>//下面方法中的notifyevent是定义的全局变量private AutoResetEvent notifyevent = null; //下面方法中的notifythread是定义的全局变量private Thread notifythread = null; //下面方法中的myNotify是定义的全局变量private Notify myNotify = null;//缓冲区提示事件 //设置通知 private void CreateNotification() { BufferPositionNotify[] bpn = new BufferPositionNotify[iNotifyNum];	//设置缓冲区通知个数  //设置通知事件  notifyevent = new AutoResetEvent(false); notifythread = new Thread(RecoData);	//开启线程  notifythread.Start(); for (int i = 0; i &amp;lt; iNotifyNum; i++) { bpn[i].Offset = iNotifySize + i * iNotifySize-1;//设置具体每个的位置  bpn[i].EventNotifyHandle = notifyevent.Handle; } myNotify = new Notify(capturebuffer); myNotify.SetNotificationPositions(bpn); } //线程中的事件 private void RecoData() { while (true) { // 等待缓冲区的通知消息  //notifyevent.</description>
+			<content type="html"><![CDATA[<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//下面方法中的notifyevent是定义的全局变量private AutoResetEvent notifyevent = null;
+</span><span class="c1">//下面方法中的notifythread是定义的全局变量private Thread notifythread = null;
+</span><span class="c1">//下面方法中的myNotify是定义的全局变量private Notify myNotify = null;//缓冲区提示事件
+</span><span class="c1">//设置通知
+</span><span class="c1"></span><span class="k">private</span> <span class="k">void</span> <span class="n">CreateNotification</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">BufferPositionNotify</span><span class="p">[]</span> <span class="n">bpn</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BufferPositionNotify</span><span class="p">[</span><span class="n">iNotifyNum</span><span class="p">];</span>		<span class="c1">//设置缓冲区通知个数
+</span><span class="c1"></span>    <span class="c1">//设置通知事件
+</span><span class="c1"></span>    <span class="n">notifyevent</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+    <span class="n">notifythread</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="p">(</span><span class="n">RecoData</span><span class="p">);</span>		<span class="c1">//开启线程
+</span><span class="c1"></span>    <span class="n">notifythread</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+    
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">iNotifyNum</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="p">{</span>
+        <span class="n">bpn</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Offset</span> <span class="p">=</span> <span class="n">iNotifySize</span> <span class="p">+</span> <span class="n">i</span> <span class="p">*</span> <span class="n">iNotifySize</span><span class="p">-</span><span class="m">1</span><span class="p">;</span><span class="c1">//设置具体每个的位置
+</span><span class="c1"></span>        <span class="n">bpn</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">EventNotifyHandle</span> <span class="p">=</span> <span class="n">notifyevent</span><span class="p">.</span><span class="n">Handle</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">myNotify</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Notify</span><span class="p">(</span><span class="n">capturebuffer</span><span class="p">);</span>
+    <span class="n">myNotify</span><span class="p">.</span><span class="n">SetNotificationPositions</span><span class="p">(</span><span class="n">bpn</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//线程中的事件
+</span><span class="c1"></span><span class="k">private</span> <span class="k">void</span> <span class="n">RecoData</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 等待缓冲区的通知消息
+</span><span class="c1"></span>        <span class="c1">//notifyevent.WaitOne();
+</span><span class="c1"></span>        <span class="n">notifyevent</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">(</span><span class="n">Timeout</span><span class="p">.</span><span class="n">Infinite</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+        <span class="c1">// 录制数据
+</span><span class="c1"></span>        <span class="n">RecordCapturedData</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//下面方法中的iBufferOffset是定义的全局变量private int iBufferOffset = 0;//本次数据起始点， 上一次数据的终点
+</span><span class="c1">//真正转移数据的事件
+</span><span class="c1"></span><span class="k">private</span> <span class="k">void</span> <span class="n">RecordCapturedData</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">capturedata</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">readpos</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">capturepos</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">locksize</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="n">capturebuffer</span><span class="p">.</span><span class="n">GetCurrentPosition</span><span class="p">(</span><span class="k">out</span> <span class="n">capturepos</span><span class="p">,</span> <span class="k">out</span> <span class="n">readpos</span><span class="p">);</span>
+    <span class="n">locksize</span> <span class="p">=</span> <span class="n">readpos</span> <span class="p">-</span> <span class="n">iBufferOffset</span><span class="p">;</span><span class="c1">//这个大小就是我们可以安全读取的大小
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">locksize</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">locksize</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span><span class="c1">//因为我们是循环的使用缓冲区，所以有一种情况下为负：当文以载读指针回到第一个通知点，而Ibuffeoffset还在最后一个通知处
+</span><span class="c1"></span>        <span class="n">locksize</span> <span class="p">+=</span> <span class="n">iBufferSize</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">capturedata</span> <span class="p">=</span> <span class="p">(</span><span class="kt">byte</span><span class="p">[])</span><span class="n">capturebuffer</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">iBufferOffset</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="kt">byte</span><span class="p">),</span> <span class="n">LockFlag</span><span class="p">.</span><span class="n">FromWriteCursor</span><span class="p">,</span> <span class="n">locksize</span><span class="p">);</span>
+    <span class="c1">//mWriter.Write(capturedata, 0, capturedata.Length);//写入到文件
+</span><span class="c1"></span>    <span class="n">iSampleSize</span> <span class="p">+=</span> <span class="n">capturedata</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="n">iBufferOffset</span> <span class="p">+=</span> <span class="n">capturedata</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="n">iBufferOffset</span> <span class="p">%=</span> <span class="n">iBufferSize</span><span class="p">;</span><span class="c1">//取模是因为缓冲区是循环的。
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>DX录音——缓冲区创建</title>
+			<link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/buffer/</link>
+			<pubDate>Tue, 11 May 2021 18:24:06 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/buffer/</guid>
+			<description>//下面方法中的capture是定义的全局变量private Capture capture = null; //获取PC音频设备 private bool CreateCaputerDevice() { //首先要枚举可用的捕捉设备  CaptureDevicesCollection capturedev = new CaptureDevicesCollection(); Guid devguid; if (capturedev.Count &amp;gt; 0) { devguid = capturedev[0].DriverGuid; } else { MessageBox.Show(&amp;#34;当前没有可用于音频捕捉的设备&amp;#34;, &amp;#34;系统提示&amp;#34;); return false; } //利用设备GUID来建立一个捕捉设备对象  capture = new Capture(devguid); return true; } //下面方法中的mWavFormat是定义的全局变量private WaveFormat mWavFormat; //下面方法中的iNotifySize是定义的全局变量private int iNotifySize; //下面方法中的iNotifyNum是定义的全局变量private int iNotifyNum = 16; //下面方法中的iBufferSize是定义的全局变量private int iBufferSize; //下面方法中的capturebuffer是定义的全局变量private CaptureBuffer capturebuffer = null; //获取缓冲区 private void CreateCaptureBuffer() { //想要创建一个捕捉缓冲区必须要两个参数：缓冲区信息（描述这个缓冲区中的格式等），缓冲设备。  CaptureBufferDescription bufferdescription = new CaptureBufferDescription(); bufferdescription.</description>
+			<content type="html"><![CDATA[<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//下面方法中的capture是定义的全局变量private Capture capture = null; 
+</span><span class="c1">//获取PC音频设备
+</span><span class="c1"></span><span class="k">private</span> <span class="kt">bool</span> <span class="n">CreateCaputerDevice</span><span class="p">()</span>
+ <span class="p">{</span>
+     <span class="c1">//首先要枚举可用的捕捉设备
+</span><span class="c1"></span>     <span class="n">CaptureDevicesCollection</span> <span class="n">capturedev</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureDevicesCollection</span><span class="p">();</span>
+     <span class="n">Guid</span> <span class="n">devguid</span><span class="p">;</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">capturedev</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+     <span class="p">{</span>
+         <span class="n">devguid</span> <span class="p">=</span> <span class="n">capturedev</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">DriverGuid</span><span class="p">;</span>
+     <span class="p">}</span>
+     <span class="k">else</span>
+     <span class="p">{</span>
+         <span class="n">MessageBox</span><span class="p">.</span><span class="n">Show</span><span class="p">(</span><span class="s">&#34;当前没有可用于音频捕捉的设备&#34;</span><span class="p">,</span> <span class="s">&#34;系统提示&#34;</span><span class="p">);</span>
+         <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+     <span class="p">}</span>
+     <span class="c1">//利用设备GUID来建立一个捕捉设备对象
+</span><span class="c1"></span>     <span class="n">capture</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Capture</span><span class="p">(</span><span class="n">devguid</span><span class="p">);</span>
+     <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//下面方法中的mWavFormat是定义的全局变量private WaveFormat mWavFormat; 
+</span><span class="c1">//下面方法中的iNotifySize是定义的全局变量private int iNotifySize; 
+</span><span class="c1">//下面方法中的iNotifyNum是定义的全局变量private int iNotifyNum = 16; 
+</span><span class="c1">//下面方法中的iBufferSize是定义的全局变量private int iBufferSize; 
+</span><span class="c1">//下面方法中的capturebuffer是定义的全局变量private CaptureBuffer capturebuffer = null;
+</span><span class="c1">//获取缓冲区
+</span><span class="c1"></span><span class="k">private</span> <span class="k">void</span> <span class="n">CreateCaptureBuffer</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//想要创建一个捕捉缓冲区必须要两个参数：缓冲区信息（描述这个缓冲区中的格式等），缓冲设备。
+</span><span class="c1"></span>    <span class="n">CaptureBufferDescription</span> <span class="n">bufferdescription</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureBufferDescription</span><span class="p">();</span>
+    <span class="n">bufferdescription</span><span class="p">.</span><span class="n">Format</span> <span class="p">=</span> <span class="n">mWavFormat</span><span class="p">;</span>			<span class="c1">//设置缓冲区要捕捉的数据格式
+</span><span class="c1"></span>    <span class="n">iNotifySize</span> <span class="p">=</span> <span class="m">1024</span><span class="p">;</span>								<span class="c1">//设置通知大小,如何设置一个合适的大小？
+</span><span class="c1"></span>    <span class="n">iBufferSize</span> <span class="p">=</span> <span class="n">iNotifyNum</span> <span class="p">*</span> <span class="n">iNotifySize</span><span class="p">;</span>
+    <span class="n">bufferdescription</span><span class="p">.</span><span class="n">BufferBytes</span> <span class="p">=</span> <span class="n">iBufferSize</span><span class="p">;</span>
+    <span class="n">capturebuffer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CaptureBuffer</span><span class="p">(</span><span class="n">bufferdescription</span><span class="p">,</span> <span class="n">capture</span><span class="p">);</span><span class="c1">//建立设备缓冲区对象
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>DX录音——音频格式设置</title>
+			<link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</link>
+			<pubDate>Tue, 11 May 2021 18:23:00 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</guid>
+			<description>public struct WaveFormat { //采样位数16  public short BitsPerSample { get; set; } //The value of the BlockAlign property must be equal to the product of Channels and BitsPerSample divided by 8 (bits per byte).  public short BlockAlign { get; set; } //The AverageBytesPerSecond property should be a product of BlockAlign and SamplesPerSecond  public int AverageBytesPerSecond { get; set; } //采样率：11025、22050、44100Hz  public int SamplesPerSecond { get; set; } //1单声道，2立体声  public short Channels { get; set; } //音频类型WaveFormatTag.</description>
+			<content type="html"><![CDATA[<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">struct</span> <span class="nc">WaveFormat</span>
+<span class="p">{</span>
+    <span class="c1">//采样位数16
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">short</span> <span class="n">BitsPerSample</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    
+    <span class="c1">//The value of the BlockAlign property must be equal to the product of Channels and BitsPerSample divided by 8 (bits per byte).
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">short</span> <span class="n">BlockAlign</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    
+    <span class="c1">//The AverageBytesPerSecond property should be a product of BlockAlign and SamplesPerSecond
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">AverageBytesPerSecond</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    
+    <span class="c1">//采样率：11025、22050、44100Hz  
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">int</span> <span class="n">SamplesPerSecond</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    
+    <span class="c1">//1单声道，2立体声
+</span><span class="c1"></span>    <span class="k">public</span> <span class="kt">short</span> <span class="n">Channels</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    
+    <span class="c1">//音频类型WaveFormatTag.Pcm
+</span><span class="c1"></span>    <span class="k">public</span> <span class="n">WaveFormatTag</span> <span class="n">FormatTag</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">WaveFormat</span> <span class="n">SetWaveFormat</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">WaveFormat</span> <span class="n">format</span> <span class="p">=</span> <span class="k">new</span> <span class="n">WaveFormat</span><span class="p">();</span>
+    <span class="n">format</span><span class="p">.</span><span class="n">FormatTag</span> <span class="p">=</span> <span class="n">WaveFormatTag</span><span class="p">.</span><span class="n">Pcm</span><span class="p">;</span>  
+    <span class="n">format</span><span class="p">.</span><span class="n">SamplesPerSecond</span> <span class="p">=</span> <span class="m">44100</span><span class="p">;</span>
+    <span class="n">format</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">=</span> <span class="m">16</span><span class="p">;</span>
+    <span class="n">format</span><span class="p">.</span><span class="n">Channels</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+    <span class="n">format</span><span class="p">.</span><span class="n">BlockAlign</span> <span class="p">=</span> <span class="p">(</span><span class="kt">short</span><span class="p">)(</span><span class="n">format</span><span class="p">.</span><span class="n">Channels</span> <span class="p">*</span> <span class="p">(</span><span class="n">format</span><span class="p">.</span><span class="n">BitsPerSample</span> <span class="p">/</span> <span class="m">8</span><span class="p">));</span>
+    <span class="n">format</span><span class="p">.</span><span class="n">AverageBytesPerSecond</span> <span class="p">=</span> <span class="n">format</span><span class="p">.</span><span class="n">BlockAlign</span> <span class="p">*</span> <span class="n">format</span><span class="p">.</span><span class="n">SamplesPerSecond</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">format</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>Linq</title>
+			<link>https://hansomxue99.github.io/posts/linq/</link>
+			<pubDate>Tue, 11 May 2021 18:20:27 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/linq/</guid>
+			<description>Linq查询  遍历一个集合  var query = from inventor in inventors select inventor; //返回enum类型 where过滤  var query = from patent in patents where patent.YearofPublication select new {patent.Title}; </description>
+			<content type="html"><![CDATA[<h3 id="linq查询">Linq查询</h3>
+<ol>
+<li>遍历一个集合</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> 
+    <span class="k">from</span> <span class="n">inventor</span> <span class="k">in</span> <span class="n">inventors</span> 
+    <span class="k">select</span> <span class="n">inventor</span><span class="p">;</span>
+<span class="c1">//返回enum类型
+</span></code></pre></div><ol start="2">
+<li>where过滤</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> 
+    <span class="k">from</span> <span class="n">patent</span> <span class="k">in</span> <span class="n">patents</span> 
+    <span class="k">where</span> <span class="n">patent</span><span class="p">.</span><span class="n">YearofPublication</span>
+    <span class="k">select</span> <span class="k">new</span> <span class="p">{</span><span class="n">patent</span><span class="p">.</span><span class="n">Title</span><span class="p">};</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>C#基础——多线程</title>
+			<link>https://hansomxue99.github.io/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+			<pubDate>Tue, 11 May 2021 18:20:07 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
 			<description>C# 多线程 1. 创建线程 首先必须导入命名空间 using System.Threading; 创建的线程包括无参数和有参数。
 //创建无参线程 Thread t1 = new Thread(new ThreadStart(PrintNumbers));	//无参数的委托 t1.Start(); static void PrintNumbers(){...} //创建有参线程 Thread t2 = new Thread(new ParameterizedThreadStart(PrintNumbers));	//有参数的委托 t2.Start(10); static void PrintNumbers(object count){...}	//参数类型声明为object 2. AutoResetEvent 1）对象实例化
 AutoResetEvent autoResetEvent = new AutoResetEvent(false); false：无信号，子线程的WaitOne方法不会被自动调用
@@ -361,262 +428,310 @@ static AutoResetEvent autoResetEvent = new AutoResetEvent(true); static void Mai
         <span class="n">WriteEvent</span><span class="p">.</span><span class="n">Set</span><span class="p">();</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><p>form3.cs</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#">        <span class="c1">/// &lt;summary&gt;
-</span><span class="c1"></span>        <span class="c1">/// 画布清屏
-</span><span class="c1"></span>        <span class="c1">/// &lt;/summary&gt;
-</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;sender&#34;&gt;&lt;/param&gt;
-</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;e&#34;&gt;&lt;/param&gt;
-</span><span class="c1"></span>        <span class="k">private</span> <span class="k">void</span> <span class="n">Subform2_button_clear_Click</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">Graphics</span> <span class="n">g</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">CreateGraphics</span><span class="p">();</span>
-            <span class="n">g</span><span class="p">.</span><span class="n">Clear</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="c1">/// &lt;summary&gt;
-</span><span class="c1"></span>        <span class="c1">/// 在画布上绘制波形
-</span><span class="c1"></span>        <span class="c1">/// &lt;/summary&gt;
-</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;sender&#34;&gt;&lt;/param&gt;
-</span><span class="c1"></span>        <span class="c1">/// &lt;param name=&#34;e&#34;&gt;&lt;/param&gt;
-</span><span class="c1"></span>        <span class="c1">/// 
-</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">Freq</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-        <span class="k">private</span> <span class="k">void</span> <span class="n">Subform_button_draw_Click</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">double</span> <span class="n">degree</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-            <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xo</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">,</span> <span class="n">yo</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-            <span class="k">const</span> <span class="kt">int</span> <span class="n">points</span> <span class="p">=</span> <span class="m">360</span> <span class="p">*</span> <span class="m">2</span><span class="p">;</span>
-
-            <span class="n">Graphics</span> <span class="n">g</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">CreateGraphics</span><span class="p">();</span>
-            <span class="n">g</span><span class="p">.</span><span class="n">Clear</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
-            <span class="n">Pen</span> <span class="n">pen</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Pen</span><span class="p">(</span><span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>   <span class="c1">//选择画笔颜色、型号、宽度等等
-</span><span class="c1"></span>
-            <span class="c1">//绘制坐标轴
-</span><span class="c1"></span>            <span class="n">g</span><span class="p">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">pen</span><span class="p">,</span> <span class="k">new</span> <span class="n">Point</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span><span class="p">),</span> <span class="k">new</span> <span class="n">Point</span><span class="p">(</span><span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Width</span><span class="p">,</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span><span class="p">));</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">points</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-            <span class="p">{</span>
-                <span class="n">degree</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">PI</span> <span class="p">*</span> <span class="m">2</span> <span class="p">*</span> <span class="n">i</span> <span class="p">*</span> <span class="n">Freq</span> <span class="p">/</span> <span class="m">360</span><span class="p">;</span>
-                <span class="n">x</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Width</span> <span class="p">*</span> <span class="n">i</span> <span class="p">/</span> <span class="n">points</span><span class="p">;</span>
-                <span class="n">y</span> <span class="p">=</span> <span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span> <span class="p">-</span> <span class="n">Math</span><span class="p">.</span><span class="n">Sin</span><span class="p">(</span><span class="n">degree</span><span class="p">)</span> <span class="p">*</span> <span class="p">(</span><span class="n">Subform2_pictureBox1</span><span class="p">.</span><span class="n">Size</span><span class="p">.</span><span class="n">Height</span> <span class="p">/</span> <span class="m">2</span> <span class="p">-</span> <span class="m">50</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">degree</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">g</span><span class="p">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">pen</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">xo</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">yo</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">y</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="n">xo</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
-                <span class="n">yo</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">private</span> <span class="k">void</span> <span class="n">Subform2_comboBox_fre_SelectedIndexChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">switch</span><span class="p">(</span><span class="n">Subform2_comboBox_fre</span><span class="p">.</span><span class="n">SelectedItem</span><span class="p">.</span><span class="n">ToString</span><span class="p">())</span>
-            <span class="p">{</span>
-                <span class="k">case</span> <span class="s">&#34;1kHz&#34;</span><span class="p">:</span>
-                    <span class="n">Freq</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s">&#34;2kHz&#34;</span><span class="p">:</span>
-                    <span class="n">Freq</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s">&#34;3kHz&#34;</span><span class="p">:</span>
-                    <span class="n">Freq</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">default</span><span class="p">:</span>
-                    <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
 </code></pre></div>]]></content>
 		</item>
 		
 		<item>
-			<title>C#窗体程序基础</title>
-			<link>https://hansomxue99.github.io/posts/c_winform/</link>
-			<pubDate>Mon, 26 Apr 2021 20:26:42 +0800</pubDate>
+			<title>C#基础——消息</title>
+			<link>https://hansomxue99.github.io/posts/%E6%B6%88%E6%81%AF/</link>
+			<pubDate>Tue, 11 May 2021 18:18:37 +0800</pubDate>
 			
-			<guid>https://hansomxue99.github.io/posts/c_winform/</guid>
-			<description>Form和Form.Designer的关系：Form的构造方法调用了Form.Designer中的InitializeComponent方法
-  读取时间：
-string timeStr = DateTime.Now.ToString(&amp;#34;yyyy-MM-dd HH:mm:ss&amp;#34;); //文本框显示 textBox.Text = timeStr;   两个字段属性的区别：Name和Text。
-  手工布局——&amp;gt;窗口自适应
-//重写父类的方法 protected override void Onlayout(LayoutEventArgs levent) { //1. 调用父类的layout  base.OnLayout(levent); //2. 获取客户区的窗口大小 ClientSize(注意是客户区，不包含标题栏)  int w = this.ClientSize.Width; int h = this.ClientSize.Height; //3. 根据需求，计算每一个控件的大小和位置 } 注意：文本框AutoSize设为false；窗口大小改变时，系统框架会自动调用OnLayout()方法。
-  Anchor和Dock属性不能同时设置
-  textbox
-private void box1_Keypress(object sender, KeypressEventArgs e) { char ch = e.KeyChar; if(ch == &amp;#39;\r&amp;#39;) { string str = box1.</description>
+			<guid>https://hansomxue99.github.io/posts/%E6%B6%88%E6%81%AF/</guid>
+			<description>重写消息方法  //窗体 捕获消息 const int WM_LBUTTONDOWN = 0x201; protected override void WndProc(ref Message m) { if(m.Msg == WM_LBUTTONDOWN) { Console.WriteLine(&amp;#34;WndProc左键按下&amp;#34;); } base.WndProc(ref m); } 进程间通信——发送消息  const int WM_COPYDATA = 0x004A; public struct COPYDATASTRUCT { public IntPtr dwData; public int cbData; [MarshalAs(UnmanagedType.LPStr)] public string lpData; } [DllImport(&amp;#34;User32.dll&amp;#34;, EntryPoint = &amp;#34;SendMessage&amp;#34;)] private static extern int SendMessage( int hWnd,	//handle to destination window  int Msg,	//message  int wParam,	//first message parameter  ref COPYDATASTRUCT IParam	//second message parameter ); [DllImport(&amp;#34;User32.</description>
 			<content type="html"><![CDATA[<ol>
-<li>
-<p>Form和Form.Designer的关系：Form的构造方法调用了Form.Designer中的InitializeComponent方法</p>
-</li>
-<li>
-<p>读取时间：</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="kt">string</span> <span class="n">timeStr</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&#34;yyyy-MM-dd HH:mm:ss&#34;</span><span class="p">);</span>
-   
-<span class="c1">//文本框显示
-</span><span class="c1"></span><span class="n">textBox</span><span class="p">.</span><span class="n">Text</span> <span class="p">=</span> <span class="n">timeStr</span><span class="p">;</span>
-</code></pre></div></li>
-<li>
-<p>两个字段属性的区别：Name和Text。</p>
-</li>
-<li>
-<p>手工布局——&gt;窗口自适应</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//重写父类的方法
-</span><span class="c1"></span><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="n">Onlayout</span><span class="p">(</span><span class="n">LayoutEventArgs</span> <span class="n">levent</span><span class="p">)</span>
+<li>重写消息方法</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//窗体 捕获消息
+</span><span class="c1"></span><span class="k">const</span> <span class="kt">int</span> <span class="n">WM_LBUTTONDOWN</span> <span class="p">=</span> <span class="m">0</span><span class="n">x201</span><span class="p">;</span>
+<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="n">WndProc</span><span class="p">(</span><span class="k">ref</span> <span class="n">Message</span> <span class="n">m</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="c1">//1. 调用父类的layout
-</span><span class="c1"></span>    <span class="k">base</span><span class="p">.</span><span class="n">OnLayout</span><span class="p">(</span><span class="n">levent</span><span class="p">);</span>
-       
-    <span class="c1">//2. 获取客户区的窗口大小 ClientSize(注意是客户区，不包含标题栏)
-</span><span class="c1"></span> <span class="kt">int</span> <span class="n">w</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">ClientSize</span><span class="p">.</span><span class="n">Width</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">h</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">ClientSize</span><span class="p">.</span><span class="n">Height</span><span class="p">;</span>
-       
-    <span class="c1">//3. 根据需求，计算每一个控件的大小和位置
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p>注意：文本框AutoSize设为false；窗口大小改变时，系统框架会自动调用OnLayout()方法。</p>
-</li>
-<li>
-<p>Anchor和Dock属性不能同时设置</p>
-</li>
-<li>
-<p>textbox</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="k">void</span> <span class="n">box1_Keypress</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">KeypressEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">char</span> <span class="n">ch</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">KeyChar</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">ch</span> <span class="p">==</span> <span class="sc">&#39;\r&#39;</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">Msg</span> <span class="p">==</span> <span class="n">WM_LBUTTONDOWN</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">str</span> <span class="p">=</span> <span class="n">box1</span><span class="p">.</span><span class="n">Text</span><span class="p">;</span>
-        <span class="n">MessageBox</span><span class="p">.</span><span class="n">Show</span><span class="p">(</span><span class="s">&#34;用户输入了：&#34;</span> <span class="p">+</span> <span class="n">str</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;WndProc左键按下&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">base</span><span class="p">.</span><span class="n">WndProc</span><span class="p">(</span><span class="k">ref</span> <span class="n">m</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><ol start="2">
+<li>进程间通信——发送消息</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">const</span> <span class="kt">int</span> <span class="n">WM_COPYDATA</span> <span class="p">=</span> <span class="m">0</span><span class="n">x004A</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">struct</span> <span class="nc">COPYDATASTRUCT</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">IntPtr</span> <span class="n">dwData</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">cbData</span><span class="p">;</span>
+<span class="na">    [MarshalAs(UnmanagedType.LPStr)]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">lpData</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="na">
+</span><span class="na">[DllImport(&#34;User32.dll&#34;, EntryPoint = &#34;SendMessage&#34;)]</span>
+<span class="k">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="n">SendMessage</span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">hWnd</span><span class="p">,</span>	<span class="c1">//handle to destination window
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">Msg</span><span class="p">,</span>	<span class="c1">//message
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">wParam</span><span class="p">,</span>	<span class="c1">//first message parameter
+</span><span class="c1"></span>    <span class="k">ref</span> <span class="n">COPYDATASTRUCT</span> <span class="n">IParam</span>	<span class="c1">//second message parameter
+</span><span class="c1"></span><span class="p">);</span>
+<span class="na">
+</span><span class="na">[DllImport(&#34;User32.dll&#34;, EntryPoint = &#34;FindWindow&#34;)]</span>
+<span class="k">private</span> <span class="k">extern</span> <span class="k">static</span> <span class="n">IntPtr</span> <span class="n">FindWindow</span><span class="p">(</span><span class="kt">string</span> <span class="n">lpClassName</span><span class="p">,</span> <span class="kt">string</span> <span class="n">lpWindowName</span><span class="p">);</span>
+
+<span class="c1">//自定义
+</span><span class="c1"></span><span class="k">public</span> <span class="kt">int</span> <span class="n">Send_message</span><span class="p">(</span><span class="kt">int</span> <span class="n">handle</span><span class="p">,</span> <span class="kt">string</span> <span class="n">message</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">sarr</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="p">=</span> <span class="n">sarr</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="n">COPYDATASTRUCT</span> <span class="n">cds</span><span class="p">;</span>
+    <span class="n">cds</span><span class="p">.</span><span class="n">dwData</span> <span class="p">=</span> <span class="p">(</span><span class="n">IntPtr</span><span class="p">)</span><span class="m">100</span><span class="p">;</span>
+    <span class="n">cds</span><span class="p">.</span><span class="n">lpData</span> <span class="p">=</span> <span class="n">message</span><span class="p">;</span>
+    <span class="n">cds</span><span class="p">.</span><span class="n">cbData</span> <span class="p">=</span> <span class="n">len</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">SendMeaasge</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">WM_COPYDATA</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="k">ref</span> <span class="n">cds</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">handle</span> <span class="p">=</span> <span class="n">FindWindow</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="s">&#34;Form2&#34;</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">handle</span> <span class="p">!=</span> <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">SendMessage</span><span class="p">(</span><span class="n">handle</span><span class="p">.</span><span class="n">ToInt32</span><span class="p">(),</span> <span class="s">&#34;here are some texts&#34;</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div></li>
+</code></pre></div><ol start="3">
+<li>进程间通信——捕获消息</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="n">WndProc</span><span class="p">(</span><span class="k">ref</span> <span class="n">Message</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">switch</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">Msg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="n">Wm_COPYDATA</span><span class="p">:</span>
+            <span class="c1">//处理消息
+</span><span class="c1"></span>            <span class="n">COPYDATASTRUCT</span> <span class="n">mystr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">COPYDATASTRUCT</span><span class="p">();</span>
+            <span class="n">Type</span> <span class="n">mytype</span> <span class="p">=</span> <span class="n">mystr</span><span class="p">.</span><span class="n">GetType</span><span class="p">();</span>
+            <span class="n">mystr</span> <span class="p">=</span> <span class="p">(</span><span class="n">COPYDATASTRUCT</span><span class="p">)</span><span class="n">m</span><span class="p">.</span><span class="n">GetLParam</span><span class="p">(</span><span class="n">mytype</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">content</span> <span class="p">=</span> <span class="n">mystr</span><span class="p">.</span><span class="n">lpData</span><span class="p">;</span>
+            <span class="n">label1</span><span class="p">.</span><span class="n">Text</span> <span class="p">=</span> <span class="n">content</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">base</span><span class="p">.</span><span class="n">WndProc</span><span class="p">(</span><span class="k">ref</span> <span class="n">m</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>C#基础——委托</title>
+			<link>https://hansomxue99.github.io/posts/%E5%A7%94%E6%89%98/</link>
+			<pubDate>Tue, 11 May 2021 18:17:43 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/%E5%A7%94%E6%89%98/</guid>
+			<description>1. 声明委托类型 delegate bool Function(int num); //此处不封闭 static Function GreaterThan10 = (new) delegate(int n){ return num&amp;gt;=10 ;}; 2. 修改形参列表 static List&amp;lt;int&amp;gt; Traverse(List&amp;lt;int&amp;gt; nums, Function function) { ... } 3. 传入委托 Traverse (new List&amp;lt;int&amp;gt;(){1,2,3,4,10}, GreaterThan10) 4. Lambda——对委托的简化 delegate(int num){ return num&amp;gt;=10 ;} //更改为表达式lambda (int num) =&amp;gt; {return num&amp;gt;=10 ;} //进一步简化，省去int (num) =&amp;gt; {return num&amp;gt;=10 ;} //进一步简化 n =&amp;gt; num&amp;gt;=10 5. 泛型委托 var list = new List&amp;lt;int&amp;gt;(){1,2,3,4,5,6,7}; list.Foreach(i =&amp;gt; Console.WriteLine(i)); list.Sum(n =&amp;gt; {if(n&amp;lt;=0) return 0; else return n;}); 6.</description>
+			<content type="html"><![CDATA[<h3 id="1-声明委托类型">1. 声明委托类型</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">delegate</span> <span class="kt">bool</span> <span class="n">Function</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">);</span>
+
+<span class="c1">//此处不封闭
+</span><span class="c1"></span><span class="k">static</span> <span class="n">Function</span> <span class="n">GreaterThan10</span> <span class="p">=</span> <span class="p">(</span><span class="k">new</span><span class="p">)</span> <span class="k">delegate</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">){</span> <span class="k">return</span> <span class="n">num</span><span class="p">&gt;=</span><span class="m">10</span> <span class="p">;};</span>
+</code></pre></div><h3 id="2-修改形参列表">2. 修改形参列表</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">static</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">Traverse</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">nums</span><span class="p">,</span> <span class="n">Function</span> <span class="n">function</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="3-传入委托">3. 传入委托</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="n">Traverse</span> <span class="p">(</span><span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(){</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">10</span><span class="p">},</span> <span class="n">GreaterThan10</span><span class="p">)</span>
+</code></pre></div><h3 id="4-lambda对委托的简化">4. Lambda——对委托的简化</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">delegate</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">){</span> <span class="k">return</span> <span class="n">num</span><span class="p">&gt;=</span><span class="m">10</span> <span class="p">;}</span>
+<span class="c1">//更改为表达式lambda
+</span><span class="c1"></span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="k">return</span> <span class="n">num</span><span class="p">&gt;=</span><span class="m">10</span> <span class="p">;}</span>
+<span class="c1">//进一步简化，省去int
+</span><span class="c1"></span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="k">return</span> <span class="n">num</span><span class="p">&gt;=</span><span class="m">10</span> <span class="p">;}</span>
+
+<span class="c1">//进一步简化
+</span><span class="c1"></span><span class="n">n</span> <span class="p">=&gt;</span> <span class="n">num</span><span class="p">&gt;=</span><span class="m">10</span>
+</code></pre></div><h3 id="5-泛型委托">5. 泛型委托</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="kt">var</span> <span class="n">list</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(){</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">};</span>
+<span class="n">list</span><span class="p">.</span><span class="n">Foreach</span><span class="p">(</span><span class="n">i</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+<span class="n">list</span><span class="p">.</span><span class="n">Sum</span><span class="p">(</span><span class="n">n</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="p">&lt;=</span><span class="m">0</span><span class="p">)</span> <span class="k">return</span> <span class="m">0</span><span class="p">;</span> <span class="k">else</span> <span class="k">return</span> <span class="n">n</span><span class="p">;});</span>
+</code></pre></div><h3 id="6-系统自带委托">6. 系统自带委托</h3>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">static</span> <span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;</span> <span class="n">GreaterThan10</span> <span class="p">=</span> <span class="p">(</span><span class="k">new</span><span class="p">)</span> <span class="k">delegate</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">){</span> <span class="k">return</span> <span class="n">num</span><span class="p">&gt;=</span><span class="m">10</span> <span class="p">;};</span>
+
+<span class="k">static</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">Traverse</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">nums</span><span class="p">,</span> <span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;</span> <span class="n">function</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;</span>  <span class="c1">//第一个表示输入参数，第二个为返回值
+</span><span class="c1"></span>    
+<span class="n">Predicate</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span>	<span class="c1">//返回bool，只能传一个参数
+</span></code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>C#基础——关于数据类型</title>
+			<link>https://hansomxue99.github.io/posts/%E7%9F%A5%E8%AF%86%E7%82%B9/</link>
+			<pubDate>Tue, 11 May 2021 18:15:51 +0800</pubDate>
+			
+			<guid>https://hansomxue99.github.io/posts/%E7%9F%A5%E8%AF%86%E7%82%B9/</guid>
+			<description>1. struct结构体 2. enum枚举类型 3. 异常 3.1 try / catch /finally
+try { ... } catch(...)	//可以包含多个catch { ... } finally { ... } 3.2 异常类都是继承于System.Exception
+4. 泛型 4.1 最常用的泛型——集合
+static T Sum&amp;lt;T&amp;gt; (List&amp;lt;T&amp;gt; nums) where T : struct	//泛型约束 { T sum = default(T); foreach(dynamic num in nums) { sum += num; } return sum; } 4.2 泛型的约束
+5. dll那些事 5.1 .sln：解决方案， 一个解决方案可以包含多个项目
+5.2 项目：包含程序集（Assembly）、包、模块，表现为dll、exe
+5.3 dll：动态链接库；一堆函数
+ 手工引用dll [DllImport(&amp;ldquo;kernel.</description>
+			<content type="html"><![CDATA[<h3 id="1-struct结构体">1. struct结构体</h3>
+<h3 id="2-enum枚举类型">2. enum枚举类型</h3>
+<h3 id="3-异常">3. 异常</h3>
+<p>3.1 try / catch /finally</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">try</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(...)</span>	<span class="c1">//可以包含多个catch
+</span><span class="c1"></span><span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+<span class="k">finally</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div><p>3.2 异常类都是继承于System.Exception</p>
+<h3 id="4-泛型">4. 泛型</h3>
+<p>4.1 最常用的泛型——集合</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">static</span> <span class="n">T</span> <span class="n">Sum</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">nums</span><span class="p">)</span>
+    <span class="k">where</span> <span class="n">T</span> <span class="p">:</span> <span class="k">struct</span>	<span class="c1">//泛型约束
+</span><span class="c1"></span><span class="p">{</span>
+    <span class="n">T</span> <span class="n">sum</span> <span class="p">=</span> <span class="k">default</span><span class="p">(</span><span class="n">T</span><span class="p">);</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="kt">dynamic</span> <span class="n">num</span> <span class="k">in</span> <span class="n">nums</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sum</span> <span class="p">+=</span> <span class="n">num</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div><p>4.2 泛型的约束</p>
+<h3 id="5-dll那些事">5. dll那些事</h3>
+<p>5.1 .sln：解决方案， 一个解决方案可以包含多个项目</p>
+<p>5.2 项目：包含程序集（Assembly）、包、模块，表现为dll、exe</p>
+<p>5.3 dll：动态链接库；一堆函数</p>
+<ul>
+<li>手工引用dll</li>
+<li>[DllImport(&ldquo;kernel.dll&rdquo;)]，仅用于方法windows提供的底层函数</li>
+</ul>
+<h3 id="6-数据类型转换">6. 数据类型转换</h3>
+<ol>
 <li>
-<p>checkBox复选框</p>
-<p>check属性：是否勾选</p>
-<p>Text属性：文本显示</p>
-<p>事件：Click用户点击</p>
-<p>​            CheckChanged用户点击或程序改变</p>
+<p>强制转换，从高到低转换，checked检查数据是否有问题</p>
 </li>
 <li>
-<p>下拉框</p>
-<p>添加下拉选项：自动添加（Items列表）和代码添加 <code>combox1.Items.Add(&quot;&quot;);</code></p>
-<p>获取选中值或索引：</p>
-<p>​	SlectedItem</p>
-<p>​	SlectedIndex：未选中-1</p>
-<p>用户选中事件</p>
-<p>​	SlectedIndexChanged</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">private</span> <span class="n">combox1_SelectedIndexChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;现在选中的是：&#34;</span> <span class="p">+</span> <span class="n">combox1</span><span class="p">.</span><span class="n">SelectedItem</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></li>
-<li>
-<p>列表框ListBox</p>
-<p>SelectionMode ：单选或多选模式</p>
-<p>SelectedIndexChanged：选择改变事件</p>
+<p>隐式转换，从低到高</p>
 </li>
 <li>
-<p>ToString方法的重写</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">ToString</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="s">&#34;{0} {1}&#34;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></li>
+<p>专门的转换函数</p>
+<p>Parse()：int.Parse、double.Parse……</p>
+<p>TryParse: 是否解析成功</p>
+<p>ToString()：把数据转为字符串</p>
+</li>
 </ol>
 ]]></content>
 		</item>
 		
 		<item>
-			<title>C#面向对象</title>
-			<link>https://hansomxue99.github.io/posts/c_class/</link>
-			<pubDate>Mon, 26 Apr 2021 20:23:44 +0800</pubDate>
+			<title>C#基础——类</title>
+			<link>https://hansomxue99.github.io/posts/%E7%B1%BB/</link>
+			<pubDate>Tue, 11 May 2021 18:14:26 +0800</pubDate>
 			
-			<guid>https://hansomxue99.github.io/posts/c_class/</guid>
-			<description>C#面向对象 1. 新建类和创建对象 //新建类 public class Point{ public int x,y;	//成员变量  public Piont(int x, int y){	//构造函数：函数名与类名一致，用于给对象初始化  this.x = x; this.y = y; } } //创建对象 Point p1 = new Piont(10,10);	//new关键字新建对象 2. 创建子类 //创建Piont的子类Point3D public class Point3D: Point{ public int z;	//子类对象会继承父类的public类型的成员 	public Point3D(int x, int y, int z){ //省略Point(x,y);这是因为在创建子类时，父类已经初始化，不必重复声明 	this.z = z;	//只需执行z的初始化 	} } //创建Point3D对象 //第一种方法 Point3D p2 = new Point3D(10,20,30); //第二种方法 Point p2 = new Point3D(10,20,30); 3.</description>
-			<content type="html"><![CDATA[<h2 id="c面向对象">C#面向对象</h2>
-<h3 id="1-新建类和创建对象">1. 新建类和创建对象</h3>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//新建类
-</span><span class="c1"></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Point</span><span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>		<span class="c1">//成员变量
-</span><span class="c1"></span>    
-    <span class="k">public</span> <span class="n">Piont</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>		<span class="c1">//构造函数：函数名与类名一致，用于给对象初始化
-</span><span class="c1"></span>        <span class="k">this</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建对象
-</span><span class="c1"></span><span class="n">Point</span> <span class="n">p1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Piont</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">10</span><span class="p">);</span>	<span class="c1">//new关键字新建对象
-</span></code></pre></div><h3 id="2-创建子类">2. 创建子类</h3>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建Piont的子类Point3D
-</span><span class="c1"></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Point3D</span><span class="p">:</span> <span class="n">Point</span><span class="p">{</span>
-	<span class="k">public</span> <span class="kt">int</span> <span class="n">z</span><span class="p">;</span>	<span class="c1">//子类对象会继承父类的public类型的成员
-</span><span class="c1"></span>	<span class="k">public</span> <span class="n">Point3D</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">z</span><span class="p">){</span>
-		<span class="c1">//省略Point(x,y);这是因为在创建子类时，父类已经初始化，不必重复声明
-</span><span class="c1"></span>		<span class="k">this</span><span class="p">.</span><span class="n">z</span> <span class="p">=</span> <span class="n">z</span><span class="p">;</span>		<span class="c1">//只需执行z的初始化
-</span><span class="c1"></span>	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//创建Point3D对象
-</span><span class="c1">//第一种方法
-</span><span class="c1"></span><span class="n">Point3D</span> <span class="n">p2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Point3D</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">20</span><span class="p">,</span><span class="m">30</span><span class="p">);</span>
-<span class="c1">//第二种方法
-</span><span class="c1"></span><span class="n">Point</span> <span class="n">p2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Point3D</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">20</span><span class="p">,</span><span class="m">30</span><span class="p">);</span>
-</code></pre></div><h3 id="3-类的封装性与可访问性">3. 类的封装性与可访问性</h3>
-<p>这里主要介绍两种访问关键字public和private。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">可访问性</th>
-<th style="text-align:left">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">public</td>
-<td style="text-align:left">修饰的成员变量和方法不受限</td>
-</tr>
-<tr>
-<td style="text-align:left">private</td>
-<td style="text-align:left">修饰的成员变量和方法只能在该类中访问，此类之外的方法不能对其访问。</td>
-</tr>
-</tbody>
-</table>
-<h3 id="4-static关键字">4. static关键字</h3>
-<p>顾名思义，static关键字创建的是静态成员变量或者方法。何为静态？静态即是在内存中划出一块固定的存储空间供数据进行使用。</p>
-<p>因此，对于静态方法来说，使用静态方法不必创建(new)一个新的对象，而可以直接通过类名对静态方法进行调用。</p>
-<h3 id="5-参数修饰符">5. 参数修饰符</h3>
-<ol>
+			<guid>https://hansomxue99.github.io/posts/%E7%B1%BB/</guid>
+			<description>类Class 1. 封装 1.1 理解
+ 自定义 实例化new 区分类和对象  1.2 字段和修饰符
+ public和private（默认） 字段：double、string、List  1.3 方法
+ 相当于函数  1.4 this使用
+ this指向当前类  1.5 属性理解
+ 上下文关键字value 外部输入值 自动属性public string Name{get; set;} 提供验证 只读只写  1.6 构造函数
+ 无返回值 实例化时赋值  1.7 静态成员
+ 属于类型而非实例 不需要实例化访问 静态不能调用动态 静态构造器初始化静态成员，不能加修饰符  2. 继承 2.1 消除重复代码，使用继承/派生
+2.2 has-a，is-a
+2.3 单一继承
+2.4 protected修饰符，外部无法访问，继承类可访问
+2.5 密封类sealed ，无法继承
+2.6 base基类引用，区别于this
+  子类先调用父类的构造函数，再调用子类的构造函数</description>
+			<content type="html"><![CDATA[<h2 id="类class">类Class</h2>
+<h3 id="1-封装">1. 封装</h3>
+<p>1.1 理解</p>
+<ul>
+<li>自定义</li>
+<li>实例化new</li>
+<li>区分类和对象</li>
+</ul>
+<p>1.2 字段和修饰符</p>
+<ul>
+<li>public和private（默认）</li>
+<li>字段：double、string、List</li>
+</ul>
+<p>1.3 方法</p>
+<ul>
+<li>相当于函数</li>
+</ul>
+<p>1.4 this使用</p>
+<ul>
+<li>this指向当前类</li>
+</ul>
+<p>1.5 属性理解</p>
+<ul>
+<li>上下文关键字value 外部输入值</li>
+<li>自动属性public string Name{get; set;}</li>
+<li>提供验证</li>
+<li>只读只写</li>
+</ul>
+<p>1.6 构造函数</p>
+<ul>
+<li>无返回值</li>
+<li>实例化时赋值</li>
+</ul>
+<p>1.7 静态成员</p>
+<ul>
+<li>属于类型而非实例</li>
+<li>不需要实例化访问</li>
+<li>静态不能调用动态</li>
+<li>静态构造器初始化静态成员，不能加修饰符</li>
+</ul>
+<h3 id="2-继承">2. 继承</h3>
+<p>2.1 消除重复代码，使用继承/派生</p>
+<p>2.2 has-a，is-a</p>
+<p>2.3 单一继承</p>
+<p>2.4 protected修饰符，外部无法访问，继承类可访问</p>
+<p>2.5 密封类sealed ，无法继承</p>
+<p>2.6 base基类引用，区别于this</p>
+<ul>
 <li>
-<p>ref（引用）修饰符</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="c1">//交换两数
-</span><span class="c1"></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-   
-<span class="k">class</span> <span class="nc">Test</span><span class="p">{</span>
-    <span class="k">static</span> <span class="k">void</span> <span class="n">Swap</span><span class="p">(</span><span class="k">ref</span> <span class="n">x</span><span class="p">,</span> <span class="k">ref</span> <span class="n">y</span><span class="p">){</span>
-        <span class="kt">int</span> <span class="n">temp</span> <span class="p">=</span> <span class="n">x</span><span class="p">;</span>
-        <span class="n">x</span> <span class="p">=</span> <span class="n">y</span><span class="p">;</span>
-        <span class="n">y</span> <span class="p">=</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="p">}</span>
-       
-    <span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(){</span>
-        <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">j</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
-        <span class="n">Swap</span><span class="p">(</span><span class="k">ref</span> <span class="n">i</span><span class="p">,</span> <span class="k">ref</span> <span class="n">j</span><span class="p">);</span>
-        <span class="n">Console</span><span class="p">.</span><span class="n">Writeline</span><span class="p">(</span><span class="s">&#34;{0} {1}&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>		<span class="c1">//output: &#34;2 1&#34;
-</span><span class="c1"></span>    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></li>
+<p>子类先调用父类的构造函数，再调用子类的构造函数</p>
+</li>
 <li>
-<p>out（输出）修饰符</p>
-<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-   
-<span class="k">class</span> <span class="nc">Test</span><span class="p">{</span>
-    <span class="k">static</span> <span class="k">void</span> <span class="n">Divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">result</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">remainder</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">result</span> <span class="p">=</span> <span class="n">x</span> <span class="p">/</span> <span class="n">y</span><span class="p">;</span>
-         <span class="n">remainder</span> <span class="p">=</span> <span class="n">x</span> <span class="p">%</span> <span class="n">y</span><span class="p">;</span>
-    <span class="p">}</span>
-   
-    <span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">()</span> <span class="p">{</span>
-         <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">rem</span><span class="p">;</span>
-         <span class="n">Divide</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="k">out</span> <span class="n">res</span><span class="p">,</span> <span class="k">out</span> <span class="n">rem</span><span class="p">);</span>
-         <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;{0} {1}&#34;</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">rem</span><span class="p">);</span>   <span class="c1">// Outputs &#34;3 1&#34;
-</span><span class="c1"></span>    <span class="p">}</span>
+<p>base访问构造函数public B:base.A() { &hellip; }</p>
+</li>
+</ul>
+<p>2.7 类型转换</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="n">Dog</span> <span class="n">dog</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dog</span><span class="p">();</span>
+<span class="n">Animal</span> <span class="n">animal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dog</span><span class="p">();</span>
+</code></pre></div><h3 id="3-多态一个类型多种状态">3. 多态：一个类型，多种状态</h3>
+<p>3.1 一种函数，多种使用</p>
+<div class="highlight"><pre class="chroma"><code class="language-c#" data-lang="c#"><span class="k">void</span> <span class="n">Test</span><span class="p">(</span><span class="n">Animal</span> <span class="n">animal</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">animal</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div></li>
-</ol>
+</code></pre></div><p>3.2 virtual 和 override关键字</p>
+<p>3.3 abstract抽象类</p>
+<ul>
+<li>无法实例化</li>
+<li>不提供默认方法</li>
+<li>方法用abstract修饰</li>
+<li>子类必须重写方法</li>
+</ul>
+<h3 id="4-接口">4. 接口</h3>
+<ul>
+<li>继承共享代码</li>
+<li>首选接口</li>
+<li>接口可以引用多个</li>
+</ul>
 ]]></content>
 		</item>
 		

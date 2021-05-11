@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lambda on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/lambda/</link>
+    <description>Recent content in Lambda on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:17:43 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/lambda/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#基础——委托</title>
+      <link>https://hansomxue99.github.io/posts/%E5%A7%94%E6%89%98/</link>
+      <pubDate>Tue, 11 May 2021 18:17:43 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%A7%94%E6%89%98/</guid>
+      <description>1. 声明委托类型 delegate bool Function(int num); //此处不封闭 static Function GreaterThan10 = (new) delegate(int n){ return num&amp;gt;=10 ;}; 2. 修改形参列表 static List&amp;lt;int&amp;gt; Traverse(List&amp;lt;int&amp;gt; nums, Function function) { ... } 3. 传入委托 Traverse (new List&amp;lt;int&amp;gt;(){1,2,3,4,10}, GreaterThan10) 4. Lambda——对委托的简化 delegate(int num){ return num&amp;gt;=10 ;} //更改为表达式lambda (int num) =&amp;gt; {return num&amp;gt;=10 ;} //进一步简化，省去int (num) =&amp;gt; {return num&amp;gt;=10 ;} //进一步简化 n =&amp;gt; num&amp;gt;=10 5. 泛型委托 var list = new List&amp;lt;int&amp;gt;(){1,2,3,4,5,6,7}; list.Foreach(i =&amp;gt; Console.WriteLine(i)); list.Sum(n =&amp;gt; {if(n&amp;lt;=0) return 0; else return n;}); 6.</description>
+    </item>
+    
+  </channel>
+</rss>

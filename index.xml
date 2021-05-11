@@ -7,24 +7,58 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 26 Apr 2021 20:28:28 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 11 May 2021 18:25:54 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>C#声音捕获基础</title>
-      <link>https://hansomxue99.github.io/posts/c_capturesound/</link>
-      <pubDate>Mon, 26 Apr 2021 20:28:28 +0800</pubDate>
+      <title>DX录音——写入.wav文件</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</link>
+      <pubDate>Tue, 11 May 2021 18:25:54 +0800</pubDate>
       
-      <guid>https://hansomxue99.github.io/posts/c_capturesound/</guid>
-      <description>using Microsoft.DirectX.DirectSound;
-  Capture;	//音频捕捉设备 CaptureBuffer;	//缓冲区对象 WaveFormat;	//录音格式   设置录音参数
-private WaveFormat mWaveFormat; private WaveFormat CreateWaveFormat() { WaveFormat waveformat = new WaveFormat(); waveformat.FormatTag = WaveFormatTag.Pcm;	//音频类型设为PCM  waveformat.SamplesPerSecond = 11025;	//采样率典型值：11025、22050、44100Hz(为了简化程序，暂且设为定值)  waveformat.BitsPerSample = 16;	//采样位数  waveformat.Channels = 2;	//声道：1单声道，2立体声  waveformat.BlockAlign = (short)(waveformat.Channels * (waveformat.BitsPerSample / 8));//单位采样点的字节数  waveformat.AverageBytesPerSecond = waveformat.BlockAlign * waveformat.SamplesPerSecond; return waveformat; // 按照以上采样规格，可知采样1秒钟的字节数为 11025*2=32000B 约为22K } //mWaveFormat = CreateWaveFormat();   初始化录音设备</description>
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</guid>
+      <description>//private string strRecSaveFile = string.Empty;//文件保存路径 //private FileStream fsWav = null;//保存的文件流 //private BinaryWriter mWriter; private void CreateWaveFile(string strFileName) { fsWav = new FileStream(strFileName, FileMode.CreateNew); mWriter = new BinaryWriter(fsWav); /************************************************************************** Here is where the file will be created. A wave file is a RIFF file, which has chunks of data that describe what the file contains. A wave RIFF file is put together like this: The 12 byte RIFF chunk is constructed like this: Bytes 0 - 3 : &amp;#39;R&amp;#39; &amp;#39;I&amp;#39; &amp;#39;F&amp;#39; &amp;#39;F&amp;#39; Bytes 4 - 7 : Length of file, minus the first 8 bytes of the RIFF description.</description>
     </item>
     
     <item>
-      <title>C#多线程</title>
-      <link>https://hansomxue99.github.io/posts/c_multithread/</link>
-      <pubDate>Mon, 26 Apr 2021 20:27:32 +0800</pubDate>
+      <title>DX录音——通知创建</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/notify/</link>
+      <pubDate>Tue, 11 May 2021 18:24:55 +0800</pubDate>
       
-      <guid>https://hansomxue99.github.io/posts/c_multithread/</guid>
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/notify/</guid>
+      <description>//下面方法中的notifyevent是定义的全局变量private AutoResetEvent notifyevent = null; //下面方法中的notifythread是定义的全局变量private Thread notifythread = null; //下面方法中的myNotify是定义的全局变量private Notify myNotify = null;//缓冲区提示事件 //设置通知 private void CreateNotification() { BufferPositionNotify[] bpn = new BufferPositionNotify[iNotifyNum];	//设置缓冲区通知个数  //设置通知事件  notifyevent = new AutoResetEvent(false); notifythread = new Thread(RecoData);	//开启线程  notifythread.Start(); for (int i = 0; i &amp;lt; iNotifyNum; i++) { bpn[i].Offset = iNotifySize + i * iNotifySize-1;//设置具体每个的位置  bpn[i].EventNotifyHandle = notifyevent.Handle; } myNotify = new Notify(capturebuffer); myNotify.SetNotificationPositions(bpn); } //线程中的事件 private void RecoData() { while (true) { // 等待缓冲区的通知消息  //notifyevent.</description>
+    </item>
+    
+    <item>
+      <title>DX录音——缓冲区创建</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/buffer/</link>
+      <pubDate>Tue, 11 May 2021 18:24:06 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/buffer/</guid>
+      <description>//下面方法中的capture是定义的全局变量private Capture capture = null; //获取PC音频设备 private bool CreateCaputerDevice() { //首先要枚举可用的捕捉设备  CaptureDevicesCollection capturedev = new CaptureDevicesCollection(); Guid devguid; if (capturedev.Count &amp;gt; 0) { devguid = capturedev[0].DriverGuid; } else { MessageBox.Show(&amp;#34;当前没有可用于音频捕捉的设备&amp;#34;, &amp;#34;系统提示&amp;#34;); return false; } //利用设备GUID来建立一个捕捉设备对象  capture = new Capture(devguid); return true; } //下面方法中的mWavFormat是定义的全局变量private WaveFormat mWavFormat; //下面方法中的iNotifySize是定义的全局变量private int iNotifySize; //下面方法中的iNotifyNum是定义的全局变量private int iNotifyNum = 16; //下面方法中的iBufferSize是定义的全局变量private int iBufferSize; //下面方法中的capturebuffer是定义的全局变量private CaptureBuffer capturebuffer = null; //获取缓冲区 private void CreateCaptureBuffer() { //想要创建一个捕捉缓冲区必须要两个参数：缓冲区信息（描述这个缓冲区中的格式等），缓冲设备。  CaptureBufferDescription bufferdescription = new CaptureBufferDescription(); bufferdescription.</description>
+    </item>
+    
+    <item>
+      <title>DX录音——音频格式设置</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</link>
+      <pubDate>Tue, 11 May 2021 18:23:00 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/waveformat/</guid>
+      <description>public struct WaveFormat { //采样位数16  public short BitsPerSample { get; set; } //The value of the BlockAlign property must be equal to the product of Channels and BitsPerSample divided by 8 (bits per byte).  public short BlockAlign { get; set; } //The AverageBytesPerSecond property should be a product of BlockAlign and SamplesPerSecond  public int AverageBytesPerSecond { get; set; } //采样率：11025、22050、44100Hz  public int SamplesPerSecond { get; set; } //1单声道，2立体声  public short Channels { get; set; } //音频类型WaveFormatTag.</description>
+    </item>
+    
+    <item>
+      <title>Linq</title>
+      <link>https://hansomxue99.github.io/posts/linq/</link>
+      <pubDate>Tue, 11 May 2021 18:20:27 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/linq/</guid>
+      <description>Linq查询  遍历一个集合  var query = from inventor in inventors select inventor; //返回enum类型 where过滤  var query = from patent in patents where patent.YearofPublication select new {patent.Title}; </description>
+    </item>
+    
+    <item>
+      <title>C#基础——多线程</title>
+      <link>https://hansomxue99.github.io/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Tue, 11 May 2021 18:20:07 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
       <description>C# 多线程 1. 创建线程 首先必须导入命名空间 using System.Threading; 创建的线程包括无参数和有参数。
 //创建无参线程 Thread t1 = new Thread(new ThreadStart(PrintNumbers));	//无参数的委托 t1.Start(); static void PrintNumbers(){...} //创建有参线程 Thread t2 = new Thread(new ParameterizedThreadStart(PrintNumbers));	//有参数的委托 t2.Start(10); static void PrintNumbers(object count){...}	//参数类型声明为object 2. AutoResetEvent 1）对象实例化
 AutoResetEvent autoResetEvent = new AutoResetEvent(false); false：无信号，子线程的WaitOne方法不会被自动调用
@@ -37,37 +71,59 @@ static AutoResetEvent autoResetEvent = new AutoResetEvent(true); static void Mai
     </item>
     
     <item>
-      <title>C#窗体程序基础</title>
-      <link>https://hansomxue99.github.io/posts/c_winform/</link>
-      <pubDate>Mon, 26 Apr 2021 20:26:42 +0800</pubDate>
+      <title>C#基础——消息</title>
+      <link>https://hansomxue99.github.io/posts/%E6%B6%88%E6%81%AF/</link>
+      <pubDate>Tue, 11 May 2021 18:18:37 +0800</pubDate>
       
-      <guid>https://hansomxue99.github.io/posts/c_winform/</guid>
-      <description>Form和Form.Designer的关系：Form的构造方法调用了Form.Designer中的InitializeComponent方法
-  读取时间：
-string timeStr = DateTime.Now.ToString(&amp;#34;yyyy-MM-dd HH:mm:ss&amp;#34;); //文本框显示 textBox.Text = timeStr;   两个字段属性的区别：Name和Text。
-  手工布局——&amp;gt;窗口自适应
-//重写父类的方法 protected override void Onlayout(LayoutEventArgs levent) { //1. 调用父类的layout  base.OnLayout(levent); //2. 获取客户区的窗口大小 ClientSize(注意是客户区，不包含标题栏)  int w = this.ClientSize.Width; int h = this.ClientSize.Height; //3. 根据需求，计算每一个控件的大小和位置 } 注意：文本框AutoSize设为false；窗口大小改变时，系统框架会自动调用OnLayout()方法。
-  Anchor和Dock属性不能同时设置
-  textbox
-private void box1_Keypress(object sender, KeypressEventArgs e) { char ch = e.KeyChar; if(ch == &amp;#39;\r&amp;#39;) { string str = box1.</description>
+      <guid>https://hansomxue99.github.io/posts/%E6%B6%88%E6%81%AF/</guid>
+      <description>重写消息方法  //窗体 捕获消息 const int WM_LBUTTONDOWN = 0x201; protected override void WndProc(ref Message m) { if(m.Msg == WM_LBUTTONDOWN) { Console.WriteLine(&amp;#34;WndProc左键按下&amp;#34;); } base.WndProc(ref m); } 进程间通信——发送消息  const int WM_COPYDATA = 0x004A; public struct COPYDATASTRUCT { public IntPtr dwData; public int cbData; [MarshalAs(UnmanagedType.LPStr)] public string lpData; } [DllImport(&amp;#34;User32.dll&amp;#34;, EntryPoint = &amp;#34;SendMessage&amp;#34;)] private static extern int SendMessage( int hWnd,	//handle to destination window  int Msg,	//message  int wParam,	//first message parameter  ref COPYDATASTRUCT IParam	//second message parameter ); [DllImport(&amp;#34;User32.</description>
     </item>
     
     <item>
-      <title>C#面向对象</title>
-      <link>https://hansomxue99.github.io/posts/c_class/</link>
-      <pubDate>Mon, 26 Apr 2021 20:23:44 +0800</pubDate>
+      <title>C#基础——委托</title>
+      <link>https://hansomxue99.github.io/posts/%E5%A7%94%E6%89%98/</link>
+      <pubDate>Tue, 11 May 2021 18:17:43 +0800</pubDate>
       
-      <guid>https://hansomxue99.github.io/posts/c_class/</guid>
-      <description>C#面向对象 1. 新建类和创建对象 //新建类 public class Point{ public int x,y;	//成员变量  public Piont(int x, int y){	//构造函数：函数名与类名一致，用于给对象初始化  this.x = x; this.y = y; } } //创建对象 Point p1 = new Piont(10,10);	//new关键字新建对象 2. 创建子类 //创建Piont的子类Point3D public class Point3D: Point{ public int z;	//子类对象会继承父类的public类型的成员 	public Point3D(int x, int y, int z){ //省略Point(x,y);这是因为在创建子类时，父类已经初始化，不必重复声明 	this.z = z;	//只需执行z的初始化 	} } //创建Point3D对象 //第一种方法 Point3D p2 = new Point3D(10,20,30); //第二种方法 Point p2 = new Point3D(10,20,30); 3.</description>
+      <guid>https://hansomxue99.github.io/posts/%E5%A7%94%E6%89%98/</guid>
+      <description>1. 声明委托类型 delegate bool Function(int num); //此处不封闭 static Function GreaterThan10 = (new) delegate(int n){ return num&amp;gt;=10 ;}; 2. 修改形参列表 static List&amp;lt;int&amp;gt; Traverse(List&amp;lt;int&amp;gt; nums, Function function) { ... } 3. 传入委托 Traverse (new List&amp;lt;int&amp;gt;(){1,2,3,4,10}, GreaterThan10) 4. Lambda——对委托的简化 delegate(int num){ return num&amp;gt;=10 ;} //更改为表达式lambda (int num) =&amp;gt; {return num&amp;gt;=10 ;} //进一步简化，省去int (num) =&amp;gt; {return num&amp;gt;=10 ;} //进一步简化 n =&amp;gt; num&amp;gt;=10 5. 泛型委托 var list = new List&amp;lt;int&amp;gt;(){1,2,3,4,5,6,7}; list.Foreach(i =&amp;gt; Console.WriteLine(i)); list.Sum(n =&amp;gt; {if(n&amp;lt;=0) return 0; else return n;}); 6.</description>
     </item>
     
     <item>
-      <title>关于</title>
-      <link>https://hansomxue99.github.io/about-hugo/</link>
-      <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
+      <title>C#基础——关于数据类型</title>
+      <link>https://hansomxue99.github.io/posts/%E7%9F%A5%E8%AF%86%E7%82%B9/</link>
+      <pubDate>Tue, 11 May 2021 18:15:51 +0800</pubDate>
       
-      <guid>https://hansomxue99.github.io/about-hugo/</guid>
-      <description>本站用于记录学习过程中的一些思考！</description>
+      <guid>https://hansomxue99.github.io/posts/%E7%9F%A5%E8%AF%86%E7%82%B9/</guid>
+      <description>1. struct结构体 2. enum枚举类型 3. 异常 3.1 try / catch /finally
+try { ... } catch(...)	//可以包含多个catch { ... } finally { ... } 3.2 异常类都是继承于System.Exception
+4. 泛型 4.1 最常用的泛型——集合
+static T Sum&amp;lt;T&amp;gt; (List&amp;lt;T&amp;gt; nums) where T : struct	//泛型约束 { T sum = default(T); foreach(dynamic num in nums) { sum += num; } return sum; } 4.2 泛型的约束
+5. dll那些事 5.1 .sln：解决方案， 一个解决方案可以包含多个项目
+5.2 项目：包含程序集（Assembly）、包、模块，表现为dll、exe
+5.3 dll：动态链接库；一堆函数
+ 手工引用dll [DllImport(&amp;ldquo;kernel.</description>
+    </item>
+    
+    <item>
+      <title>C#基础——类</title>
+      <link>https://hansomxue99.github.io/posts/%E7%B1%BB/</link>
+      <pubDate>Tue, 11 May 2021 18:14:26 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E7%B1%BB/</guid>
+      <description>类Class 1. 封装 1.1 理解
+ 自定义 实例化new 区分类和对象  1.2 字段和修饰符
+ public和private（默认） 字段：double、string、List  1.3 方法
+ 相当于函数  1.4 this使用
+ this指向当前类  1.5 属性理解
+ 上下文关键字value 外部输入值 自动属性public string Name{get; set;} 提供验证 只读只写  1.6 构造函数
+ 无返回值 实例化时赋值  1.7 静态成员
+ 属于类型而非实例 不需要实例化访问 静态不能调用动态 静态构造器初始化静态成员，不能加修饰符  2. 继承 2.1 消除重复代码，使用继承/派生
+2.2 has-a，is-a
+2.3 单一继承
+2.4 protected修饰符，外部无法访问，继承类可访问
+2.5 密封类sealed ，无法继承
+2.6 base基类引用，区别于this
+  子类先调用父类的构造函数，再调用子类的构造函数</description>
     </item>
     
   </channel>

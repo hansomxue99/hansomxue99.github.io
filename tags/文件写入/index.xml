@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>文件写入 on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5/</link>
+    <description>Recent content in 文件写入 on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:25:54 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DX录音——写入.wav文件</title>
+      <link>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</link>
+      <pubDate>Tue, 11 May 2021 18:25:54 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E5%BD%95%E9%9F%B3/%E4%BA%8B%E4%BB%B6/</guid>
+      <description>//private string strRecSaveFile = string.Empty;//文件保存路径 //private FileStream fsWav = null;//保存的文件流 //private BinaryWriter mWriter; private void CreateWaveFile(string strFileName) { fsWav = new FileStream(strFileName, FileMode.CreateNew); mWriter = new BinaryWriter(fsWav); /************************************************************************** Here is where the file will be created. A wave file is a RIFF file, which has chunks of data that describe what the file contains. A wave RIFF file is put together like this: The 12 byte RIFF chunk is constructed like this: Bytes 0 - 3 : &amp;#39;R&amp;#39; &amp;#39;I&amp;#39; &amp;#39;F&amp;#39; &amp;#39;F&amp;#39; Bytes 4 - 7 : Length of file, minus the first 8 bytes of the RIFF description.</description>
+    </item>
+    
+  </channel>
+</rss>

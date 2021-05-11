@@ -7,13 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Mon, 26 Apr 2021 20:27:32 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/multithread/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 11 May 2021 18:20:07 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/multithread/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>C#多线程</title>
-      <link>https://hansomxue99.github.io/posts/c_multithread/</link>
-      <pubDate>Mon, 26 Apr 2021 20:27:32 +0800</pubDate>
+      <title>C#基础——多线程</title>
+      <link>https://hansomxue99.github.io/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Tue, 11 May 2021 18:20:07 +0800</pubDate>
       
-      <guid>https://hansomxue99.github.io/posts/c_multithread/</guid>
+      <guid>https://hansomxue99.github.io/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
       <description>C# 多线程 1. 创建线程 首先必须导入命名空间 using System.Threading; 创建的线程包括无参数和有参数。
 //创建无参线程 Thread t1 = new Thread(new ThreadStart(PrintNumbers));	//无参数的委托 t1.Start(); static void PrintNumbers(){...} //创建有参线程 Thread t2 = new Thread(new ParameterizedThreadStart(PrintNumbers));	//有参数的委托 t2.Start(10); static void PrintNumbers(object count){...}	//参数类型声明为object 2. AutoResetEvent 1）对象实例化
 AutoResetEvent autoResetEvent = new AutoResetEvent(false); false：无信号，子线程的WaitOne方法不会被自动调用

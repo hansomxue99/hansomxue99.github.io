@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据类型 on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+    <description>Recent content in 数据类型 on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:15:51 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#基础——关于数据类型</title>
+      <link>https://hansomxue99.github.io/posts/%E7%9F%A5%E8%AF%86%E7%82%B9/</link>
+      <pubDate>Tue, 11 May 2021 18:15:51 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E7%9F%A5%E8%AF%86%E7%82%B9/</guid>
+      <description>1. struct结构体 2. enum枚举类型 3. 异常 3.1 try / catch /finally
+try { ... } catch(...)	//可以包含多个catch { ... } finally { ... } 3.2 异常类都是继承于System.Exception
+4. 泛型 4.1 最常用的泛型——集合
+static T Sum&amp;lt;T&amp;gt; (List&amp;lt;T&amp;gt; nums) where T : struct	//泛型约束 { T sum = default(T); foreach(dynamic num in nums) { sum += num; } return sum; } 4.2 泛型的约束
+5. dll那些事 5.1 .sln：解决方案， 一个解决方案可以包含多个项目
+5.2 项目：包含程序集（Assembly）、包、模块，表现为dll、exe
+5.3 dll：动态链接库；一堆函数
+ 手工引用dll [DllImport(&amp;ldquo;kernel.</description>
+    </item>
+    
+  </channel>
+</rss>

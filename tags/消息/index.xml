@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>消息 on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/%E6%B6%88%E6%81%AF/</link>
+    <description>Recent content in 消息 on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:18:37 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/%E6%B6%88%E6%81%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#基础——消息</title>
+      <link>https://hansomxue99.github.io/posts/%E6%B6%88%E6%81%AF/</link>
+      <pubDate>Tue, 11 May 2021 18:18:37 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E6%B6%88%E6%81%AF/</guid>
+      <description>重写消息方法  //窗体 捕获消息 const int WM_LBUTTONDOWN = 0x201; protected override void WndProc(ref Message m) { if(m.Msg == WM_LBUTTONDOWN) { Console.WriteLine(&amp;#34;WndProc左键按下&amp;#34;); } base.WndProc(ref m); } 进程间通信——发送消息  const int WM_COPYDATA = 0x004A; public struct COPYDATASTRUCT { public IntPtr dwData; public int cbData; [MarshalAs(UnmanagedType.LPStr)] public string lpData; } [DllImport(&amp;#34;User32.dll&amp;#34;, EntryPoint = &amp;#34;SendMessage&amp;#34;)] private static extern int SendMessage( int hWnd,	//handle to destination window  int Msg,	//message  int wParam,	//first message parameter  ref COPYDATASTRUCT IParam	//second message parameter ); [DllImport(&amp;#34;User32.</description>
+    </item>
+    
+  </channel>
+</rss>

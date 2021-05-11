@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>类 on Team&#39;s blog</title>
+    <link>https://hansomxue99.github.io/tags/%E7%B1%BB/</link>
+    <description>Recent content in 类 on Team&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:14:26 +0800</lastBuildDate><atom:link href="https://hansomxue99.github.io/tags/%E7%B1%BB/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#基础——类</title>
+      <link>https://hansomxue99.github.io/posts/%E7%B1%BB/</link>
+      <pubDate>Tue, 11 May 2021 18:14:26 +0800</pubDate>
+      
+      <guid>https://hansomxue99.github.io/posts/%E7%B1%BB/</guid>
+      <description>类Class 1. 封装 1.1 理解
+ 自定义 实例化new 区分类和对象  1.2 字段和修饰符
+ public和private（默认） 字段：double、string、List  1.3 方法
+ 相当于函数  1.4 this使用
+ this指向当前类  1.5 属性理解
+ 上下文关键字value 外部输入值 自动属性public string Name{get; set;} 提供验证 只读只写  1.6 构造函数
+ 无返回值 实例化时赋值  1.7 静态成员
+ 属于类型而非实例 不需要实例化访问 静态不能调用动态 静态构造器初始化静态成员，不能加修饰符  2. 继承 2.1 消除重复代码，使用继承/派生
+2.2 has-a，is-a
+2.3 单一继承
+2.4 protected修饰符，外部无法访问，继承类可访问
+2.5 密封类sealed ，无法继承
+2.6 base基类引用，区别于this
+  子类先调用父类的构造函数，再调用子类的构造函数</description>
+    </item>
+    
+  </channel>
+</rss>
